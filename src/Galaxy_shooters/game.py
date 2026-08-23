@@ -1158,6 +1158,33 @@ class GalaxyShootersGame:
         )
         surface.blit(controls_text, (WIDTH // 2 - controls_text.get_width() // 2, 452))
 
+    def draw_winner(self, surface: pygame.Surface):
+        surface.blit(self.bg_space, (0, 0))
+        mx, my = pygame.mouse.get_pos()
+
+        winner_text = self.title_font.render(self.winner_text, True, (255, 215, 0))
+        surface.blit(winner_text, (WIDTH // 2 - winner_text.get_width() // 2, 135))
+
+        score_text = self.health_font.render(f"FINAL SCORE: {self.score}   HIGH SCORE: {self.high_score}", True, WHITE)
+        surface.blit(score_text, (WIDTH // 2 - score_text.get_width() // 2, 205))
+
+        btn_restart = pygame.Rect(WIDTH // 2 - 160, 280, 320, 48)
+        btn_menu = pygame.Rect(WIDTH // 2 - 160, 345, 320, 48)
+
+        for rect, label in [(btn_restart, "> PLAY AGAIN <"), (btn_menu, "< MAIN MENU")]:
+            is_hovered = rect.collidepoint(mx, my)
+            card_surface = pygame.Surface((rect.width, rect.height), pygame.SRCALPHA)
+            bg_color = (66, 133, 244, 220) if is_hovered else (18, 22, 40, 160)
+            card_surface.fill(bg_color)
+            pygame.draw.rect(card_surface, bg_color, (0, 0, rect.width, rect.height), border_radius=10)
+            surface.blit(card_surface, (rect.x, rect.y))
+
+            border_color = (255, 215, 0) if is_hovered else (70, 110, 180)
+            pygame.draw.rect(surface, border_color, rect, 3 if is_hovered else 2, border_radius=10)
+
+            btn_txt = self.health_small_font.render(label, True, WHITE)
+            surface.blit(btn_txt, (rect.centerx - btn_txt.get_width() // 2, rect.centery - btn_txt.get_height() // 2))
+
     def draw_level_clear(self, surface: pygame.Surface):
         surface.blit(self.bg_space, (0, 0))
         self.starfield.draw(surface)
