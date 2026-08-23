@@ -1065,14 +1065,15 @@ class GalaxyShootersGame:
         for rect, label in options:
             is_hover = rect.collidepoint(mx, my)
             card = pygame.Surface((rect.width, rect.height), pygame.SRCALPHA)
-            card.fill((66, 133, 244, 230) if is_hover else (18, 22, 45, 180))
-            pygame.draw.rect(card, (66, 133, 244, 230) if is_hover else (18, 22, 45, 180), (0, 0, rect.width, rect.height), border_radius=10)
+            card.fill((66, 133, 244, 230) if is_hover else (18, 22, 45, 220))
+            pygame.draw.rect(card, (66, 133, 244, 230) if is_hover else (18, 22, 45, 220), (0, 0, rect.width, rect.height), border_radius=10)
             surface.blit(card, (rect.x, rect.y))
-        border_clr = (255, 215, 0) if is_hover else (70, 110, 190)
-        pygame.draw.rect(surface, border_clr, rect, 3 if is_hover else 2, border_radius=10)
 
-        txt = self.health_small_font.render(label, True, WHITE)
-        surface.blit(txt, (rect.centerx - txt.get_width() // 2, rect.centery - txt.get_height() // 2))
+            border_clr = (255, 215, 0) if is_hover else (70, 110, 190)
+            pygame.draw.rect(surface, border_clr, rect, 3 if is_hover else 2, border_radius=10)
+
+            txt = self.health_small_font.render(label, True, (255, 235, 90) if is_hover else WHITE)
+            surface.blit(txt, (rect.centerx - txt.get_width() // 2, rect.centery - txt.get_height() // 2))
 
     def draw_menu(self, surface: pygame.Surface):
         surface.blit(self.bg_space, (0, 0))
