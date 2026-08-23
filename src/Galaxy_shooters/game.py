@@ -729,8 +729,10 @@ class GalaxyShootersGame:
                         btn_quit = pygame.Rect(WIDTH // 2 - 180, 382, 360, 44)
                         if btn_ai.collidepoint(mx, my):
                             self.game_mode = "ai"
+                            self.reset_match()
                         elif btn_two.collidepoint(mx, my):
                             self.game_mode = "two"
+                            self.reset_match()
                         elif btn_start.collidepoint(mx, my):
                             self.reset_match()
                         elif btn_quit.collidepoint(mx, my):
