@@ -67,7 +67,7 @@ LEVEL_CONFIG = {
         "clear_bonus": 1500,
     },
     4: {
-        "title": "LEVEL 4: BOSS COMMANDER 👑",
+        "title": "LEVEL 4: BOSS COMMANDER",
         "ai_vel": 5,
         "fire_interval_ms": 360,
         "max_health": 14,
@@ -1064,7 +1064,7 @@ class GalaxyShootersGame:
         border_clr = (255, 215, 0) if is_hovered else (80, 120, 200)
         pygame.draw.rect(surface, border_clr, btn_nav, 2, border_radius=8)
 
-        nav_txt = self.health_small_font.render("⚙️ NAV / PAUSE", True, WHITE)
+        nav_txt = self.health_small_font.render("NAV / PAUSE", True, WHITE)
         surface.blit(nav_txt, (btn_nav.centerx - nav_txt.get_width() // 2, btn_nav.centery - nav_txt.get_height() // 2))
 
     def draw_pause_navigation_menu(self, surface: pygame.Surface):
@@ -1088,12 +1088,12 @@ class GalaxyShootersGame:
         btn_sound = pygame.Rect(WIDTH // 2 - 150, 300, 300, 46)
         btn_menu = pygame.Rect(WIDTH // 2 - 150, 360, 300, 46)
 
-        sound_label = "🔊  SOUND: ON" if self.sound_enabled else "🔇  SOUND: OFF"
+        sound_label = "S  SOUND: ON" if self.sound_enabled else "S  SOUND: OFF"
         options = [
-            (btn_resume, "▶️  RESUME BATTLE"),
-            (btn_restart, "🔄  RESTART LEVEL"),
+            (btn_resume, "> RESUME BATTLE <"),
+            (btn_restart, "R  RESTART LEVEL"),
             (btn_sound, sound_label),
-            (btn_menu, "🏠  MAIN MENU"),
+            (btn_menu, "M  MAIN MENU"),
         ]
 
         for rect, label in options:
@@ -1116,7 +1116,7 @@ class GalaxyShootersGame:
         title_text = self.title_font.render("GALAXY SHOOTERS", True, WHITE)
         surface.blit(title_text, (WIDTH // 2 - title_text.get_width() // 2, 45))
 
-        subtitle_text = self.health_small_font.render("SPACE BATTLE CAMPAIGN 🚀", True, (90, 220, 255))
+        subtitle_text = self.health_small_font.render("SPACE BATTLE CAMPAIGN", True, (90, 220, 255))
         surface.blit(subtitle_text, (WIDTH // 2 - subtitle_text.get_width() // 2, 120))
 
         # Material Design Menu Buttons (with rounded corners)
@@ -1126,10 +1126,10 @@ class GalaxyShootersGame:
         btn_quit = pygame.Rect(WIDTH // 2 - 180, 382, 360, 44)
 
         buttons = [
-            (btn_ai, "👤  1  PLAYER VS AI (4 LEVELS)", self.game_mode == "ai"),
-            (btn_two, "👥  2  PLAYERS LOCAL PVP", self.game_mode == "two"),
-            (btn_start, "▶  START BATTLE", False),
-            (btn_quit, "🚪  EXIT GAME", False),
+            (btn_ai, "[1]  1 PLAYER VS AI (4 LEVELS)", self.game_mode == "ai"),
+            (btn_two, "[2]  2 PLAYERS LOCAL PVP", self.game_mode == "two"),
+            (btn_start, "> START BATTLE <", False),
+            (btn_quit, "X  EXIT GAME", False),
         ]
 
         for rect, label, is_selected in buttons:
@@ -1175,7 +1175,7 @@ class GalaxyShootersGame:
         btn_restart = pygame.Rect(WIDTH // 2 - 160, 280, 320, 48)
         btn_menu = pygame.Rect(WIDTH // 2 - 160, 345, 320, 48)
 
-        for rect, label in [(btn_restart, "🔄  PLAY AGAIN"), (btn_menu, "🏠  MAIN MENU")]:
+        for rect, label in [(btn_restart, "> PLAY AGAIN <"), (btn_menu, "< MAIN MENU")]:
             is_hovered = rect.collidepoint(mx, my)
             card_surface = pygame.Surface((rect.width, rect.height), pygame.SRCALPHA)
             bg_color = (66, 133, 244, 220) if is_hovered else (18, 22, 40, 160)
@@ -1200,7 +1200,7 @@ class GalaxyShootersGame:
         cur_cfg = LEVEL_CONFIG.get(self.current_level, LEVEL_CONFIG[1])
         next_cfg = LEVEL_CONFIG.get(self.current_level + 1, LEVEL_CONFIG[4])
 
-        title = self.title_font.render(f"LEVEL {self.current_level} CLEARED! 🌟", True, (255, 215, 0))
+        title = self.title_font.render(f"LEVEL {self.current_level} CLEARED!", True, (255, 215, 0))
         surface.blit(title, (WIDTH // 2 - title.get_width() // 2, 130))
 
         bonus = self.menu_font.render(f"+{cur_cfg['clear_bonus']} CLEAR BONUS!", True, (90, 230, 255))
