@@ -41,38 +41,20 @@ POWERUP_CONFIG = {
     "speed": {"label": "SPEED", "icon": "»", "color": (255, 180, 55)},
 }
 
-LEVEL_CONFIG = {
-    1: {
-        "title": "LEVEL 1: ROOKIE BOT",
+UNLIMITED_CONFIG = {
+    "simple": {
+        "title": "UNLIMITED SIMPLE",
         "ai_vel": 2,
-        "fire_interval_ms": 750,
-        "max_health": 6,
-        "dodge_chance": 0.25,
-        "clear_bonus": 500,
-    },
-    2: {
-        "title": "LEVEL 2: CADET PILOT",
-        "ai_vel": 3,
-        "fire_interval_ms": 580,
+        "fire_interval_ms": 680,
         "max_health": 8,
-        "dodge_chance": 0.45,
-        "clear_bonus": 1000,
+        "dodge_chance": 0.25,
     },
-    3: {
-        "title": "LEVEL 3: VETERAN PILOT",
+    "hard": {
+        "title": "UNLIMITED HARD",
         "ai_vel": 4,
-        "fire_interval_ms": 460,
-        "max_health": 10,
-        "dodge_chance": 0.65,
-        "clear_bonus": 1500,
-    },
-    4: {
-        "title": "LEVEL 4: BOSS COMMANDER",
-        "ai_vel": 5,
-        "fire_interval_ms": 360,
-        "max_health": 14,
-        "dodge_chance": 0.80,
-        "clear_bonus": 3000,
+        "fire_interval_ms": 400,
+        "max_health": 12,
+        "dodge_chance": 0.70,
     },
 }
 
@@ -636,11 +618,12 @@ class GalaxyShootersGame:
         self.thruster_particles: list[ThrusterParticle] = []
         self.starfield = Starfield(WIDTH, HEIGHT, count=55)
 
-        # High Score & Level Campaign State
+        # High Score & Unlimited State
         self.highscore_file = os.path.join(os.path.dirname(__file__), "highscores_gs.json")
         self.score = 0
         self.high_score = self.load_high_score()
-        self.current_level = 1
+        self.difficulty = "simple"  # 'simple' or 'hard'
+        self.wave_count = 1
 
         # Screen Shake
         self.shake_amount = 0
@@ -648,7 +631,7 @@ class GalaxyShootersGame:
 
         # Game State & Navigation
         self.running = True
-        self.game_mode = "ai"  # 'ai' or 'two'
+        self.game_mode = "ai"
         self.state = "menu"  # 'menu', 'playing', 'game_over', 'level_clear'
         self.is_paused = False
         self.sound_enabled = True
@@ -681,7 +664,7 @@ class GalaxyShootersGame:
         self.shake_until = now + duration_ms
 
     def apply_level_config(self):
-        cfg = LEVEL_CONFIG.get(self.current_level, LEVEL_CONFIG[1])
+        cfg = UNLIMITED_CONFIG.get(self.difficulty, UNLIMITED_CONFIG["simple"])
         self.yellow.health = self.yellow.max_health
         self.yellow.rect.y = 300
         self.red.max_health = cfg["max_health"]
@@ -693,11 +676,11 @@ class GalaxyShootersGame:
 
     def reset_match(self):
         now = pygame.time.get_ticks()
-        self.current_level = 1
+        self.wave_count = 1
         self.score = 0
         self.yellow.reset(100, 300)
         self.red.reset(700, 300)
-        self.red.is_ai = self.game_mode == "ai"
+        self.red.is_ai = True
         self.apply_level_config()
         self.flashes.clear()
         self.explosions.clear()
@@ -723,16 +706,23 @@ class GalaxyShootersGame:
                     mx, my = event.pos
                     
                     if self.state == "menu":
-                        btn_ai = pygame.Rect(WIDTH // 2 - 180, 190, 360, 50)
-                        btn_two = pygame.Rect(WIDTH // 2 - 180, 252, 360, 50)
-                        btn_start = pygame.Rect(WIDTH // 2 - 180, 315, 360, 54)
-                        btn_quit = pygame.Rect(WIDTH // 2 - 180, 382, 360, 44)
-                        if btn_ai.collidepoint(mx, my):
-                            self.game_mode = "ai"
+                        btn_mode = pygame.Rect(WIDTH // 2 - 180, 180, 360, 48)
+                        btn_simple = pygame.Rect(WIDTH // 2 - 170, 235, 160, 40)
+                        btn_hard = pygame.Rect(WIDTH // 2 + 10, 235, 160, 40)
+                        btn_two = pygame.Rect(WIDTH // 2 - 180, 288, 360, 48)
+                        btn_start = pygame.Rect(WIDTH // 2 - 180, 348, 360, 52)
+                        btn_quit = pygame.Rect(WIDTH // 2 - 180, 410, 360, 40)
+
+                        if btn_mode.collidepoint(mx, my):
+                            self.reset_match()
+                        elif btn_simple.collidepoint(mx, my):
+                            self.difficulty = "simple"
+                            self.reset_match()
+                        elif btn_hard.collidepoint(mx, my):
+                            self.difficulty = "hard"
                             self.reset_match()
                         elif btn_two.collidepoint(mx, my):
-                            self.game_mode = "two"
-                            self.reset_match()
+                            self.floating_texts.append(FloatingText("2-PLAYER MODE COMING SOON!", WIDTH // 2, 290, (255, 215, 0), duration_ms=1800))
                         elif btn_start.collidepoint(mx, my):
                             self.reset_match()
                         elif btn_quit.collidepoint(mx, my):
@@ -843,7 +833,7 @@ class GalaxyShootersGame:
                 self.audio.play_laser()
 
         if self.game_mode == "ai":
-            cfg = LEVEL_CONFIG.get(self.current_level, LEVEL_CONFIG[1])
+            cfg = UNLIMITED_CONFIG.get(self.difficulty, UNLIMITED_CONFIG["simple"])
             self.red.update_ai(
                 self.yellow,
                 self.yellow_bullets,
@@ -860,7 +850,8 @@ class GalaxyShootersGame:
                 if bullets:
                     self.red_bullets.extend(bullets)
                     self.flashes.append(flash)
-                    self.audio.play_laser()
+                    if self.sound_enabled:
+                        self.audio.play_laser()
                 self.red.next_ai_shot_time = now + cfg["fire_interval_ms"]
         else:
             self.red.move_human(keys, now, HEIGHT)
@@ -871,18 +862,8 @@ class GalaxyShootersGame:
             if bullets:
                 self.yellow_bullets.extend(bullets)
                 self.flashes.append(flash)
-                self.audio.play_laser()
-
-        if (
-            self.game_mode == "two"
-            and self.red.is_effect_active("rapid", now)
-            and keys[self.red.controls["fire"]]
-        ):
-            bullets, flash = self.red.fire(len(self.red_bullets), now)
-            if bullets:
-                self.red_bullets.extend(bullets)
-                self.flashes.append(flash)
-                self.audio.play_laser()
+                if self.sound_enabled:
+                    self.audio.play_laser()
 
         # Update starfield background
         self.starfield.update()
@@ -926,7 +907,8 @@ class GalaxyShootersGame:
                 took_damage = self.red.take_damage(now)
                 self.hit_player = "red"
                 self.hit_feedback_until = now + 250
-                self.audio.play_hit()
+                if self.sound_enabled:
+                    self.audio.play_hit()
                 self.trigger_shake(amount=9, duration_ms=220, now=now)
                 if took_damage:
                     self.score += 100
@@ -944,7 +926,8 @@ class GalaxyShootersGame:
                 took_damage = self.yellow.take_damage(now)
                 self.hit_player = "yellow"
                 self.hit_feedback_until = now + 250
-                self.audio.play_hit()
+                if self.sound_enabled:
+                    self.audio.play_hit()
                 self.trigger_shake(amount=9, duration_ms=220, now=now)
                 txt = "HIT!" if took_damage else "SHIELDED!"
                 clr = (255, 240, 90) if took_damage else (100, 180, 255)
@@ -963,44 +946,26 @@ class GalaxyShootersGame:
 
         if self.state == "level_clear":
             if now >= getattr(self, "level_clear_until", 0):
-                self.current_level += 1
                 self.apply_level_config()
                 self.state = "playing"
             return
 
         # Check win/loss/level conditions
         if self.red.health <= 0:
-            if self.game_mode == "ai":
-                cfg = LEVEL_CONFIG.get(self.current_level, LEVEL_CONFIG[1])
-                self.score += cfg["clear_bonus"]
-                self.save_high_score()
-                if self.current_level < 4:
-                    self.state = "level_clear"
-                    self.level_clear_until = now + 2400
-                    self.audio.play_victory()
-                    self.trigger_shake(amount=14, duration_ms=350, now=now)
-                else:
-                    self.winner_text = "CAMPAIGN COMPLETED! YOU WIN! 🏆"
-                    self.state = "game_over"
-                    self.save_high_score()
-                    self.trigger_shake(amount=20, duration_ms=500, now=now)
-                    self.audio.fadeout_music(250)
-                    self.audio.play_victory()
-            else:
-                self.winner_text = "Yellow wins!"
-                self.state = "game_over"
-                self.score += 1000
-                self.save_high_score()
-                self.trigger_shake(amount=18, duration_ms=450, now=now)
-                self.audio.fadeout_music(250)
+            self.score += 500 * self.wave_count
+            self.save_high_score()
+            self.wave_count += 1
+            self.state = "level_clear"
+            self.level_clear_until = now + 2000
+            if self.sound_enabled:
                 self.audio.play_victory()
+            self.trigger_shake(amount=14, duration_ms=350, now=now)
         elif self.yellow.health <= 0:
-            self.winner_text = "Computer wins!" if self.game_mode == "ai" else "Red wins!"
+            self.winner_text = "GAME OVER!"
             self.state = "game_over"
             self.save_high_score()
             self.trigger_shake(amount=18, duration_ms=450, now=now)
             self.audio.fadeout_music(250)
-            self.audio.play_victory()
 
     def draw_health_bar(self, surface: pygame.Surface, x: int, y: int, health: int, max_health: int, color: tuple, align_right: bool = False):
         health_ratio = max(0, health) / max(1, max_health)
@@ -1035,10 +1000,9 @@ class GalaxyShootersGame:
         self.draw_health_bar(surface, WIDTH - 15, 26, self.red.health, self.red.max_health, RED, align_right=True)
 
         # Level Title & Score HUD
-        if self.game_mode == "ai":
-            lvl_title = LEVEL_CONFIG.get(self.current_level, LEVEL_CONFIG[1])["title"]
-            lvl_surface = self.health_small_font.render(lvl_title, True, (255, 215, 0))
-            surface.blit(lvl_surface, (WIDTH // 2 - lvl_surface.get_width() // 2, 4))
+        lvl_title = f"UNLIMITED WAVE {self.wave_count} - {self.difficulty.upper()}"
+        lvl_surface = self.health_small_font.render(lvl_title, True, (255, 215, 0))
+        surface.blit(lvl_surface, (WIDTH // 2 - lvl_surface.get_width() // 2, 4))
 
         score_surface = self.health_small_font.render(f"SCORE: {self.score}   HIGH SCORE: {self.high_score}", True, WHITE)
         surface.blit(score_surface, (WIDTH // 2 - score_surface.get_width() // 2, 32))
@@ -1116,80 +1080,83 @@ class GalaxyShootersGame:
         mx, my = pygame.mouse.get_pos()
 
         title_text = self.title_font.render("GALAXY SHOOTERS", True, WHITE)
-        surface.blit(title_text, (WIDTH // 2 - title_text.get_width() // 2, 45))
+        surface.blit(title_text, (WIDTH // 2 - title_text.get_width() // 2, 40))
 
-        subtitle_text = self.health_small_font.render("SPACE BATTLE CAMPAIGN", True, (90, 220, 255))
-        surface.blit(subtitle_text, (WIDTH // 2 - subtitle_text.get_width() // 2, 120))
+        subtitle_text = self.health_small_font.render("UNLIMITED BATTLE ARENA", True, (90, 220, 255))
+        surface.blit(subtitle_text, (WIDTH // 2 - subtitle_text.get_width() // 2, 110))
 
-        # Material Design Menu Buttons (with rounded corners)
-        btn_ai = pygame.Rect(WIDTH // 2 - 180, 190, 360, 50)
-        btn_two = pygame.Rect(WIDTH // 2 - 180, 252, 360, 50)
-        btn_start = pygame.Rect(WIDTH // 2 - 180, 315, 360, 54)
-        btn_quit = pygame.Rect(WIDTH // 2 - 180, 382, 360, 44)
+        # Menu Cards
+        btn_mode = pygame.Rect(WIDTH // 2 - 180, 170, 360, 44)
+        btn_simple = pygame.Rect(WIDTH // 2 - 170, 222, 160, 40)
+        btn_hard = pygame.Rect(WIDTH // 2 + 10, 222, 160, 40)
+        btn_two = pygame.Rect(WIDTH // 2 - 180, 276, 360, 48)
+        btn_start = pygame.Rect(WIDTH // 2 - 180, 335, 360, 52)
+        btn_quit = pygame.Rect(WIDTH // 2 - 180, 398, 360, 42)
 
-        buttons = [
-            (btn_ai, "[1]  1 PLAYER VS AI (4 LEVELS)", self.game_mode == "ai"),
-            (btn_two, "[2]  2 PLAYERS LOCAL PVP", self.game_mode == "two"),
-            (btn_start, "> START BATTLE <", False),
-            (btn_quit, "X  EXIT GAME", False),
-        ]
+        # 1. Mode Card
+        is_h_mode = btn_mode.collidepoint(mx, my)
+        card1 = pygame.Surface((btn_mode.width, btn_mode.height), pygame.SRCALPHA)
+        card1.fill((66, 133, 244, 220) if is_h_mode else (25, 45, 90, 180))
+        pygame.draw.rect(card1, (25, 45, 90, 180), (0, 0, btn_mode.width, btn_mode.height), border_radius=12)
+        surface.blit(card1, (btn_mode.x, btn_mode.y))
+        pygame.draw.rect(surface, (255, 215, 0) if is_h_mode else (70, 110, 180), btn_mode, 2, border_radius=12)
+        txt1 = self.health_small_font.render("[1]  UNLIMITED ENDLESS BATTLE", True, (255, 235, 90))
+        surface.blit(txt1, (btn_mode.centerx - txt1.get_width() // 2, btn_mode.centery - txt1.get_height() // 2))
 
-        for rect, label, is_selected in buttons:
-            is_hovered = rect.collidepoint(mx, my)
-            
-            # Material Card Background
-            card_surface = pygame.Surface((rect.width, rect.height), pygame.SRCALPHA)
-            if is_hovered:
-                bg_color = (66, 133, 244, 220)  # Google Blue Hover
-            elif is_selected:
-                bg_color = (25, 45, 90, 200)
-            else:
-                bg_color = (18, 22, 40, 160)
-            
-            # Draw Material Rounded Card
-            pygame.draw.rect(card_surface, bg_color, (0, 0, rect.width, rect.height), border_radius=12)
-            surface.blit(card_surface, (rect.x, rect.y))
+        # Sub-toggles: Simple / Hard
+        for r, label, is_act in [(btn_simple, "SIMPLE (EASY)", self.difficulty == "simple"), (btn_hard, "HARD (INTENSE)", self.difficulty == "hard")]:
+            is_h = r.collidepoint(mx, my)
+            sub_card = pygame.Surface((r.width, r.height), pygame.SRCALPHA)
+            bg_clr = (40, 160, 240, 220) if is_h else ((20, 90, 40, 190) if is_act and "SIMPLE" in label else ((140, 30, 30, 190) if is_act else (15, 20, 35, 160)))
+            sub_card.fill(bg_clr)
+            pygame.draw.rect(sub_card, bg_clr, (0, 0, r.width, r.height), border_radius=10)
+            surface.blit(sub_card, (r.x, r.y))
+            b_clr = (255, 215, 0) if (is_act or is_h) else (70, 90, 140)
+            pygame.draw.rect(surface, b_clr, r, 3 if (is_act or is_h) else 1, border_radius=10)
+            t_clr = WHITE if is_act or is_h else (180, 190, 210)
+            stxt = self.health_small_font.render(label, True, t_clr)
+            surface.blit(stxt, (r.centerx - stxt.get_width() // 2, r.centery - stxt.get_height() // 2))
 
-            # Material Card Border Glow
-            border_color = (255, 215, 0) if (is_selected or is_hovered) else (70, 110, 180)
-            border_width = 3 if is_hovered else (2 if is_selected else 1)
-            pygame.draw.rect(surface, border_color, rect, border_width, border_radius=12)
+        # 2. Coming Soon Card
+        is_h_two = btn_two.collidepoint(mx, my)
+        card2 = pygame.Surface((btn_two.width, btn_two.height), pygame.SRCALPHA)
+        card2.fill((40, 40, 60, 140))
+        pygame.draw.rect(card2, (40, 40, 60, 140), (0, 0, btn_two.width, btn_two.height), border_radius=12)
+        surface.blit(card2, (btn_two.x, btn_two.y))
+        pygame.draw.rect(surface, (255, 215, 0) if is_h_two else (90, 90, 110), btn_two, 2 if is_h_two else 1, border_radius=12)
+        txt2 = self.health_small_font.render("[2]  2 PLAYERS LOCAL PVP (COMING SOON)", True, (160, 160, 180))
+        surface.blit(txt2, (btn_two.centerx - txt2.get_width() // 2, btn_two.centery - txt2.get_height() // 2))
 
-            # Material Symbol Label Text
-            text_color = (255, 235, 90) if (is_selected or is_hovered) else WHITE
-            btn_txt = self.health_small_font.render(label, True, text_color)
-            surface.blit(btn_txt, (rect.centerx - btn_txt.get_width() // 2, rect.centery - btn_txt.get_height() // 2))
+        # 3. Start Battle Card
+        is_h_start = btn_start.collidepoint(mx, my)
+        card3 = pygame.Surface((btn_start.width, btn_start.height), pygame.SRCALPHA)
+        card3.fill((66, 133, 244, 230) if is_h_start else (20, 60, 130, 180))
+        pygame.draw.rect(card3, (66, 133, 244, 230) if is_h_start else (20, 60, 130, 180), (0, 0, btn_start.width, btn_start.height), border_radius=12)
+        surface.blit(card3, (btn_start.x, btn_start.y))
+        pygame.draw.rect(surface, (255, 215, 0) if is_h_start else (70, 130, 220), btn_start, 3 if is_h_start else 2, border_radius=12)
+        txt3 = self.health_small_font.render("> START UNLIMITED BATTLE <", True, (255, 235, 90) if is_h_start else WHITE)
+        surface.blit(txt3, (btn_start.centerx - txt3.get_width() // 2, btn_start.centery - txt3.get_height() // 2))
+
+        # 4. Exit Button
+        is_h_quit = btn_quit.collidepoint(mx, my)
+        card4 = pygame.Surface((btn_quit.width, btn_quit.height), pygame.SRCALPHA)
+        card4.fill((180, 40, 40, 210) if is_h_quit else (18, 22, 40, 150))
+        pygame.draw.rect(card4, (180, 40, 40, 210) if is_h_quit else (18, 22, 40, 150), (0, 0, btn_quit.width, btn_quit.height), border_radius=12)
+        surface.blit(card4, (btn_quit.x, btn_quit.y))
+        pygame.draw.rect(surface, (255, 90, 90) if is_h_quit else (90, 90, 120), btn_quit, 2 if is_h_quit else 1, border_radius=12)
+        txt4 = self.health_small_font.render("X  EXIT GAME", True, WHITE)
+        surface.blit(txt4, (btn_quit.centerx - txt4.get_width() // 2, btn_quit.centery - txt4.get_height() // 2))
+
+        # Floating text notifications
+        for ft in self.floating_texts:
+            ft.draw(surface, self.powerup_font, pygame.time.get_ticks())
 
         controls_text = self.health_small_font.render(
-            "Material UI: Click buttons to select mode | Mouse Move + Left Click to shoot",
+            "Click SIMPLE or HARD to choose difficulty | Left Click to shoot",
             True,
             (180, 210, 255),
         )
-        surface.blit(controls_text, (WIDTH // 2 - controls_text.get_width() // 2, 442))
-
-    def draw_winner(self, surface: pygame.Surface):
-        surface.blit(self.bg_space, (0, 0))
-        mx, my = pygame.mouse.get_pos()
-
-        winner_text = self.title_font.render(self.winner_text, True, (255, 215, 0))
-        surface.blit(winner_text, (WIDTH // 2 - winner_text.get_width() // 2, 140))
-
-        btn_restart = pygame.Rect(WIDTH // 2 - 160, 280, 320, 48)
-        btn_menu = pygame.Rect(WIDTH // 2 - 160, 345, 320, 48)
-
-        for rect, label in [(btn_restart, "> PLAY AGAIN <"), (btn_menu, "< MAIN MENU")]:
-            is_hovered = rect.collidepoint(mx, my)
-            card_surface = pygame.Surface((rect.width, rect.height), pygame.SRCALPHA)
-            bg_color = (66, 133, 244, 220) if is_hovered else (18, 22, 40, 160)
-            card_surface.fill(bg_color)
-            pygame.draw.rect(card_surface, bg_color, (0, 0, rect.width, rect.height), border_radius=10)
-            surface.blit(card_surface, (rect.x, rect.y))
-
-            border_color = (255, 215, 0) if is_hovered else (70, 110, 180)
-            pygame.draw.rect(surface, border_color, rect, 3 if is_hovered else 2, border_radius=10)
-
-            btn_txt = self.health_small_font.render(label, True, WHITE)
-            surface.blit(btn_txt, (rect.centerx - btn_txt.get_width() // 2, rect.centery - btn_txt.get_height() // 2))
+        surface.blit(controls_text, (WIDTH // 2 - controls_text.get_width() // 2, 452))
 
     def draw_level_clear(self, surface: pygame.Surface):
         surface.blit(self.bg_space, (0, 0))
@@ -1199,20 +1166,14 @@ class GalaxyShootersGame:
         overlay.fill((10, 15, 35, 200))
         surface.blit(overlay, (0, 0))
 
-        cur_cfg = LEVEL_CONFIG.get(self.current_level, LEVEL_CONFIG[1])
-        next_cfg = LEVEL_CONFIG.get(self.current_level + 1, LEVEL_CONFIG[4])
+        title = self.title_font.render(f"WAVE {self.wave_count - 1} CLEARED!", True, (255, 215, 0))
+        surface.blit(title, (WIDTH // 2 - title.get_width() // 2, 140))
 
-        title = self.title_font.render(f"LEVEL {self.current_level} CLEARED!", True, (255, 215, 0))
-        surface.blit(title, (WIDTH // 2 - title.get_width() // 2, 130))
+        bonus = self.menu_font.render(f"+{500 * (self.wave_count - 1)} WAVE BONUS!", True, (90, 230, 255))
+        surface.blit(bonus, (WIDTH // 2 - bonus.get_width() // 2, 215))
 
-        bonus = self.menu_font.render(f"+{cur_cfg['clear_bonus']} CLEAR BONUS!", True, (90, 230, 255))
-        surface.blit(bonus, (WIDTH // 2 - bonus.get_width() // 2, 205))
-
-        next_txt = self.health_font.render(f"NEXT: {next_cfg['title']}", True, WHITE)
-        surface.blit(next_txt, (WIDTH // 2 - next_txt.get_width() // 2, 270))
-
-        prep_txt = self.health_small_font.render("Restoring ship health & loading next level...", True, (200, 200, 220))
-        surface.blit(prep_txt, (WIDTH // 2 - prep_txt.get_width() // 2, 335))
+        next_txt = self.health_font.render(f"PREPARING WAVE {self.wave_count}...", True, WHITE)
+        surface.blit(next_txt, (WIDTH // 2 - next_txt.get_width() // 2, 280))
 
     def render(self, now: int):
         # Calculate Screen Shake Offset
