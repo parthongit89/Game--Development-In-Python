@@ -706,23 +706,23 @@ class GalaxyShootersGame:
                     mx, my = event.pos
                     
                     if self.state == "menu":
-                        btn_mode = pygame.Rect(WIDTH // 2 - 180, 180, 360, 48)
-                        btn_simple = pygame.Rect(WIDTH // 2 - 170, 235, 160, 40)
-                        btn_hard = pygame.Rect(WIDTH // 2 + 10, 235, 160, 40)
-                        btn_two = pygame.Rect(WIDTH // 2 - 180, 288, 360, 48)
-                        btn_start = pygame.Rect(WIDTH // 2 - 180, 348, 360, 52)
-                        btn_quit = pygame.Rect(WIDTH // 2 - 180, 410, 360, 40)
+                        btn_mode_container = pygame.Rect(WIDTH // 2 - 190, 140, 380, 85)
+                        btn_simple = pygame.Rect(WIDTH // 2 - 175, 182, 160, 34)
+                        btn_hard = pygame.Rect(WIDTH // 2 + 15, 182, 160, 34)
+                        btn_two = pygame.Rect(WIDTH // 2 - 190, 242, 380, 48)
+                        btn_start = pygame.Rect(WIDTH // 2 - 190, 308, 380, 54)
+                        btn_quit = pygame.Rect(WIDTH // 2 - 190, 378, 380, 44)
 
-                        if btn_mode.collidepoint(mx, my):
-                            self.reset_match()
-                        elif btn_simple.collidepoint(mx, my):
+                        if btn_simple.collidepoint(mx, my):
                             self.difficulty = "simple"
                             self.reset_match()
                         elif btn_hard.collidepoint(mx, my):
                             self.difficulty = "hard"
                             self.reset_match()
+                        elif btn_mode_container.collidepoint(mx, my):
+                            self.reset_match()
                         elif btn_two.collidepoint(mx, my):
-                            self.floating_texts.append(FloatingText("2-PLAYER MODE COMING SOON!", WIDTH // 2, 290, (255, 215, 0), duration_ms=1800))
+                            self.floating_texts.append(FloatingText("2-PLAYER MODE COMING SOON!", WIDTH // 2, 255, (255, 215, 0), duration_ms=1800))
                         elif btn_start.collidepoint(mx, my):
                             self.reset_match()
                         elif btn_quit.collidepoint(mx, my):
@@ -1068,82 +1068,100 @@ class GalaxyShootersGame:
             card.fill((66, 133, 244, 230) if is_hover else (18, 22, 45, 180))
             pygame.draw.rect(card, (66, 133, 244, 230) if is_hover else (18, 22, 45, 180), (0, 0, rect.width, rect.height), border_radius=10)
             surface.blit(card, (rect.x, rect.y))
+        border_clr = (255, 215, 0) if is_hover else (70, 110, 190)
+        pygame.draw.rect(surface, border_clr, rect, 3 if is_hover else 2, border_radius=10)
 
-            border_clr = (255, 215, 0) if is_hover else (70, 110, 190)
-            pygame.draw.rect(surface, border_clr, rect, 3 if is_hover else 2, border_radius=10)
-
-            txt = self.health_small_font.render(label, True, WHITE)
-            surface.blit(txt, (rect.centerx - txt.get_width() // 2, rect.centery - txt.get_height() // 2))
+        txt = self.health_small_font.render(label, True, WHITE)
+        surface.blit(txt, (rect.centerx - txt.get_width() // 2, rect.centery - txt.get_height() // 2))
 
     def draw_menu(self, surface: pygame.Surface):
         surface.blit(self.bg_space, (0, 0))
         mx, my = pygame.mouse.get_pos()
 
+        # Title Header
         title_text = self.title_font.render("GALAXY SHOOTERS", True, WHITE)
-        surface.blit(title_text, (WIDTH // 2 - title_text.get_width() // 2, 40))
+        surface.blit(title_text, (WIDTH // 2 - title_text.get_width() // 2, 35))
 
         subtitle_text = self.health_small_font.render("UNLIMITED BATTLE ARENA", True, (90, 220, 255))
-        surface.blit(subtitle_text, (WIDTH // 2 - subtitle_text.get_width() // 2, 110))
+        surface.blit(subtitle_text, (WIDTH // 2 - subtitle_text.get_width() // 2, 98))
 
-        # Menu Cards
-        btn_mode = pygame.Rect(WIDTH // 2 - 180, 170, 360, 44)
-        btn_simple = pygame.Rect(WIDTH // 2 - 170, 222, 160, 40)
-        btn_hard = pygame.Rect(WIDTH // 2 + 10, 222, 160, 40)
-        btn_two = pygame.Rect(WIDTH // 2 - 180, 276, 360, 48)
-        btn_start = pygame.Rect(WIDTH // 2 - 180, 335, 360, 52)
-        btn_quit = pygame.Rect(WIDTH // 2 - 180, 398, 360, 42)
+        # Card 1: Unlimited Mode Container Card
+        btn_mode_container = pygame.Rect(WIDTH // 2 - 190, 138, 380, 86)
+        is_h_container = btn_mode_container.collidepoint(mx, my)
 
-        # 1. Mode Card
-        is_h_mode = btn_mode.collidepoint(mx, my)
-        card1 = pygame.Surface((btn_mode.width, btn_mode.height), pygame.SRCALPHA)
-        card1.fill((66, 133, 244, 220) if is_h_mode else (25, 45, 90, 180))
-        pygame.draw.rect(card1, (25, 45, 90, 180), (0, 0, btn_mode.width, btn_mode.height), border_radius=12)
-        surface.blit(card1, (btn_mode.x, btn_mode.y))
-        pygame.draw.rect(surface, (255, 215, 0) if is_h_mode else (70, 110, 180), btn_mode, 2, border_radius=12)
-        txt1 = self.health_small_font.render("[1]  UNLIMITED ENDLESS BATTLE", True, (255, 235, 90))
-        surface.blit(txt1, (btn_mode.centerx - txt1.get_width() // 2, btn_mode.centery - txt1.get_height() // 2))
+        card1 = pygame.Surface((btn_mode_container.width, btn_mode_container.height), pygame.SRCALPHA)
+        card1.fill((22, 32, 65, 200))
+        pygame.draw.rect(card1, (22, 32, 65, 200), (0, 0, btn_mode_container.width, btn_mode_container.height), border_radius=14)
+        surface.blit(card1, (btn_mode_container.x, btn_mode_container.y))
+        
+        border_clr = (255, 215, 0) if is_h_container else (65, 105, 185)
+        pygame.draw.rect(surface, border_clr, btn_mode_container, 2, border_radius=14)
 
-        # Sub-toggles: Simple / Hard
-        for r, label, is_act in [(btn_simple, "SIMPLE (EASY)", self.difficulty == "simple"), (btn_hard, "HARD (INTENSE)", self.difficulty == "hard")]:
+        # Title inside Card 1
+        txt1 = self.health_small_font.render("1. UNLIMITED ENDLESS BATTLE", True, (255, 235, 90))
+        surface.blit(txt1, (btn_mode_container.centerx - txt1.get_width() // 2, 148))
+
+        # Sub-toggles inside Card 1
+        btn_simple = pygame.Rect(WIDTH // 2 - 175, 180, 160, 34)
+        btn_hard = pygame.Rect(WIDTH // 2 + 15, 180, 160, 34)
+
+        for r, label, is_act in [
+            (btn_simple, "SIMPLE (EASY)", self.difficulty == "simple"),
+            (btn_hard, "HARD (INTENSE)", self.difficulty == "hard"),
+        ]:
             is_h = r.collidepoint(mx, my)
             sub_card = pygame.Surface((r.width, r.height), pygame.SRCALPHA)
-            bg_clr = (40, 160, 240, 220) if is_h else ((20, 90, 40, 190) if is_act and "SIMPLE" in label else ((140, 30, 30, 190) if is_act else (15, 20, 35, 160)))
+            bg_clr = (40, 160, 240, 230) if is_h else ((25, 130, 60, 210) if is_act and "SIMPLE" in label else ((160, 40, 40, 210) if is_act else (15, 20, 35, 170)))
             sub_card.fill(bg_clr)
-            pygame.draw.rect(sub_card, bg_clr, (0, 0, r.width, r.height), border_radius=10)
+            pygame.draw.rect(sub_card, bg_clr, (0, 0, r.width, r.height), border_radius=8)
             surface.blit(sub_card, (r.x, r.y))
+            
             b_clr = (255, 215, 0) if (is_act or is_h) else (70, 90, 140)
-            pygame.draw.rect(surface, b_clr, r, 3 if (is_act or is_h) else 1, border_radius=10)
-            t_clr = WHITE if is_act or is_h else (180, 190, 210)
+            pygame.draw.rect(surface, b_clr, r, 2 if (is_act or is_h) else 1, border_radius=8)
+            
+            t_clr = WHITE if (is_act or is_h) else (170, 180, 200)
             stxt = self.health_small_font.render(label, True, t_clr)
             surface.blit(stxt, (r.centerx - stxt.get_width() // 2, r.centery - stxt.get_height() // 2))
 
-        # 2. Coming Soon Card
+        # Card 2: 2 Players PVP (Coming Soon)
+        btn_two = pygame.Rect(WIDTH // 2 - 190, 240, 380, 48)
         is_h_two = btn_two.collidepoint(mx, my)
+
         card2 = pygame.Surface((btn_two.width, btn_two.height), pygame.SRCALPHA)
-        card2.fill((40, 40, 60, 140))
-        pygame.draw.rect(card2, (40, 40, 60, 140), (0, 0, btn_two.width, btn_two.height), border_radius=12)
+        card2.fill((30, 35, 55, 160))
+        pygame.draw.rect(card2, (30, 35, 55, 160), (0, 0, btn_two.width, btn_two.height), border_radius=12)
         surface.blit(card2, (btn_two.x, btn_two.y))
-        pygame.draw.rect(surface, (255, 215, 0) if is_h_two else (90, 90, 110), btn_two, 2 if is_h_two else 1, border_radius=12)
-        txt2 = self.health_small_font.render("[2]  2 PLAYERS LOCAL PVP (COMING SOON)", True, (160, 160, 180))
+        
+        pygame.draw.rect(surface, (255, 215, 0) if is_h_two else (75, 80, 105), btn_two, 2 if is_h_two else 1, border_radius=12)
+        
+        txt2 = self.health_small_font.render("2. 2 PLAYERS PVP   [ COMING SOON ]", True, (160, 170, 190))
         surface.blit(txt2, (btn_two.centerx - txt2.get_width() // 2, btn_two.centery - txt2.get_height() // 2))
 
-        # 3. Start Battle Card
+        # Card 3: Start Battle Button
+        btn_start = pygame.Rect(WIDTH // 2 - 190, 306, 380, 54)
         is_h_start = btn_start.collidepoint(mx, my)
+
         card3 = pygame.Surface((btn_start.width, btn_start.height), pygame.SRCALPHA)
-        card3.fill((66, 133, 244, 230) if is_h_start else (20, 60, 130, 180))
-        pygame.draw.rect(card3, (66, 133, 244, 230) if is_h_start else (20, 60, 130, 180), (0, 0, btn_start.width, btn_start.height), border_radius=12)
+        card3.fill((66, 133, 244, 230) if is_h_start else (20, 65, 140, 190))
+        pygame.draw.rect(card3, (66, 133, 244, 230) if is_h_start else (20, 65, 140, 190), (0, 0, btn_start.width, btn_start.height), border_radius=12)
         surface.blit(card3, (btn_start.x, btn_start.y))
+        
         pygame.draw.rect(surface, (255, 215, 0) if is_h_start else (70, 130, 220), btn_start, 3 if is_h_start else 2, border_radius=12)
+        
         txt3 = self.health_small_font.render("> START UNLIMITED BATTLE <", True, (255, 235, 90) if is_h_start else WHITE)
         surface.blit(txt3, (btn_start.centerx - txt3.get_width() // 2, btn_start.centery - txt3.get_height() // 2))
 
-        # 4. Exit Button
+        # Card 4: Exit Button
+        btn_quit = pygame.Rect(WIDTH // 2 - 190, 376, 380, 44)
         is_h_quit = btn_quit.collidepoint(mx, my)
+
         card4 = pygame.Surface((btn_quit.width, btn_quit.height), pygame.SRCALPHA)
         card4.fill((180, 40, 40, 210) if is_h_quit else (18, 22, 40, 150))
         pygame.draw.rect(card4, (180, 40, 40, 210) if is_h_quit else (18, 22, 40, 150), (0, 0, btn_quit.width, btn_quit.height), border_radius=12)
         surface.blit(card4, (btn_quit.x, btn_quit.y))
-        pygame.draw.rect(surface, (255, 90, 90) if is_h_quit else (90, 90, 120), btn_quit, 2 if is_h_quit else 1, border_radius=12)
+        
+        pygame.draw.rect(surface, (255, 90, 90) if is_h_quit else (80, 85, 110), btn_quit, 2 if is_h_quit else 1, border_radius=12)
+        
         txt4 = self.health_small_font.render("X  EXIT GAME", True, WHITE)
         surface.blit(txt4, (btn_quit.centerx - txt4.get_width() // 2, btn_quit.centery - txt4.get_height() // 2))
 
@@ -1152,11 +1170,11 @@ class GalaxyShootersGame:
             ft.draw(surface, self.powerup_font, pygame.time.get_ticks())
 
         controls_text = self.health_small_font.render(
-            "Click SIMPLE or HARD to choose difficulty | Left Click to shoot",
+            "Select SIMPLE or HARD difficulty | Left Click to shoot",
             True,
             (180, 210, 255),
         )
-        surface.blit(controls_text, (WIDTH // 2 - controls_text.get_width() // 2, 452))
+        surface.blit(controls_text, (WIDTH // 2 - controls_text.get_width() // 2, 442))
 
     def draw_winner(self, surface: pygame.Surface):
         surface.blit(self.bg_space, (0, 0))
