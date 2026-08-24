@@ -1139,3 +1139,288 @@ main {
     height: 70px;
   }
 }
+
+/* ==========================================================================
+   Documentation Hub Styling (docs.html)
+   ========================================================================== */
+.docs-container {
+  max-width: 1350px;
+  margin: 110px auto 60px;
+  padding: 0 20px;
+  display: flex;
+  gap: 35px;
+  position: relative;
+  z-index: 2;
+}
+
+.docs-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  background: rgba(22, 22, 22, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius-md);
+  padding: 25px 20px;
+  height: fit-content;
+  position: sticky;
+  top: 100px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+}
+
+.docs-sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-white);
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  margin-bottom: 15px;
+}
+
+.docs-sidebar-header i {
+  color: #00ff66;
+}
+
+.docs-nav-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.docs-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+.docs-nav-item:hover, .docs-nav-item.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-white);
+  border-left: 3px solid #00ff66;
+  padding-left: 17px;
+}
+
+.docs-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.docs-card {
+  background: rgba(22, 22, 22, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius-md);
+  padding: 40px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+}
+
+.docs-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 255, 102, 0.1);
+  border: 1px solid rgba(0, 255, 102, 0.4);
+  color: #00ff66;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+}
+
+.docs-h1 {
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  color: var(--text-white);
+  margin-bottom: 15px;
+  line-height: 1.3;
+}
+
+.docs-lead {
+  font-size: 1.15rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+.docs-divider {
+  border: none;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.15);
+  margin: 30px 0;
+}
+
+.docs-h2 {
+  font-size: 1.5rem;
+  color: var(--text-white);
+  margin: 30px 0 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.docs-h2 i {
+  color: #00ff66;
+}
+
+.docs-quote {
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 4px solid #00ff66;
+  padding: 16px 20px;
+  margin: 20px 0;
+  border-radius: 0 8px 8px 0;
+  color: var(--text-white);
+  font-style: italic;
+}
+
+.docs-list {
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--text-dim);
+  font-size: 1.05rem;
+  margin-bottom: 20px;
+}
+
+.docs-list strong {
+  color: var(--text-white);
+}
+
+.docs-flowchart-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 25px 0;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.flow-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+  min-width: 120px;
+}
+
+.flow-num {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #00ff66;
+  color: #000000;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.flow-title {
+  font-weight: 700;
+  color: var(--text-white);
+  font-size: 0.95rem;
+}
+
+.flow-desc {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+.flow-arrow {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 1.2rem;
+}
+
+.docs-sub-step {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin-bottom: 15px;
+}
+
+.docs-sub-step h3 {
+  font-size: 1.15rem;
+  color: var(--text-white);
+  margin-bottom: 8px;
+}
+
+.docs-sub-step p {
+  color: var(--text-dim);
+  margin-bottom: 10px;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  margin: 20px 0;
+}
+
+.docs-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.docs-table th, .docs-table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.docs-table th {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-white);
+  font-weight: 700;
+}
+
+.docs-table td {
+  color: var(--text-dim);
+}
+
+.docs-table code {
+  color: #00ff66;
+  background: #000000;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+}
+
+@media (max-width: 900px) {
+  .docs-container {
+    flex-direction: column;
+  }
+
+  .docs-sidebar {
+    width: 100%;
+    position: relative;
+    top: 0;
+  }
+
+  .docs-flowchart-box {
+    flex-direction: column;
+  }
+
+  .flow-arrow {
+    transform: rotate(90deg);
+  }
+}
+

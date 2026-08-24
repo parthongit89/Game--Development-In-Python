@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation Hub — Galaxy Shooters & Game Architecture | @harshalGamearena</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" href="src/Galaxy_shooters/build/web/favicon.png" type="image/png">
+
+  <!-- OpenGraph Meta Tags -->
+  <meta property="og:title" content="Documentation Hub — Galaxy Shooters Arcade Architecture">
+  <meta property="og:description" content="Complete developer guides, Git PR workflow documentation, game architecture specs, and marketing taglines.">
+  <meta property="og:image" content="src/Galaxy_shooters/assets/images/galaxy_shooters_wave_action.png">
+  
+  <!-- Google Fonts: Intel One Mono, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Intel+One+Mono:wght@400;500;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="docs-body">
+
+  <!-- Background Space Canvas Particles -->
+  <canvas id="space-canvas"></canvas>
+
+  <!-- Top Equalizer Spectrum Bar -->
+  <div class="equalizer-container" id="equalizer-bars"></div>
+
+  <!-- Header & Navigation Bar -->
+  <header class="site-header">
+    <nav class="navigations" aria-label="Docs Navigation">
+      <a href="index.html" class="nav-btn"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="#git-pr-guide" class="nav-btn active" data-target="git-pr-guide">Git & PR Guide</a>
+      <a href="#galaxy-shooters-arch" class="nav-btn" data-target="galaxy-shooters-arch">Galaxy Shooters</a>
+      <a href="#pong-arch" class="nav-btn" data-target="pong-arch">Pong Specs</a>
+      <a href="#taglines-guide" class="nav-btn" data-target="taglines-guide">Marketing Slogans</a>
+    </nav>
+  </header>
+
+  <!-- Main Documentation Container -->
+  <div class="docs-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="docs-sidebar">
+      <div class="docs-sidebar-header">
+        <i class="fa-solid fa-book-bookmark"></i>
+        <span>Documentation Hub</span>
+      </div>
+      <ul class="docs-nav-list">
+        <li><a href="#git-pr-guide" class="docs-nav-item active"><i class="fa-solid fa-code-branch"></i> Git & PR Guide</a></li>
+        <li><a href="#galaxy-shooters-arch" class="docs-nav-item"><i class="fa-solid fa-rocket"></i> Galaxy Shooters Specs</a></li>
+        <li><a href="#pong-arch" class="docs-nav-item"><i class="fa-solid fa-table-tennis-paddle-ball"></i> Enhanced Pong Specs</a></li>
+        <li><a href="#taglines-guide" class="docs-nav-item"><i class="fa-solid fa-bullhorn"></i> Taglines & Marketing</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="docs-content">
+      
+      <!-- Doc Section 1: Git & PR Guide -->
+      <section id="git-pr-guide" class="docs-section">
+        <div class="docs-card">
+          <div class="docs-badge"><i class="fa-solid fa-code-branch"></i> Developer Guide</div>
+          <h1 class="docs-h1">📖 The Complete Beginner's Guide to Git & GitHub Pull Requests (PR)</h1>
+          <p class="docs-lead">
+            Welcome! This guide explains what a <strong>Pull Request (PR)</strong> is, why software teams use them worldwide, how the complete PR workflow operates step-by-step, and how we created <strong>Pull Request #1</strong> for this repository.
+          </p>
+
+          <hr class="docs-divider">
+
+          <h2 class="docs-h2"><i class="fa-solid fa-lightbulb"></i> 1. What is a Pull Request (PR)?</h2>
+          <p>
+            Imagine you and your teammate are co-authoring a book. Instead of directly overwriting your teammate's original pages, you make a draft copy, write your new chapters or fix typos, and then ask:
+          </p>
+          <blockquote class="docs-quote">
+            "Hey! I improved these 3 sections. Please review my changes and pull them into the main book if you approve!"
+          </blockquote>
+          <p>
+            In software development, that formal review request is called a <strong>Pull Request (PR)</strong>. You are requesting that the repository maintainer <strong>pull (merge)</strong> your code edits into the primary codebase.
+          </p>
+
+          <h2 class="docs-h2"><i class="fa-solid fa-shield-halved"></i> 2. Why Do Developers Use Pull Requests?</h2>
+          <ul class="docs-list">
+            <li><strong>Code Safety:</strong> Prevents unreviewed code from breaking the production branch (<code>main</code>).</li>
+            <li><strong>Peer Review:</strong> Team members inspect line-by-line code differences (<strong>Diffs</strong>) before merging.</li>
+            <li><strong>Collaboration & Discussion:</strong> Developers can comment on specific lines of code, ask questions, or suggest optimizations.</li>
+            <li><strong>Version Tracking:</strong> Maintains a complete audit trail of feature additions, bug fixes, and author credits.</li>
+          </ul>
+
+          <h2 class="docs-h2"><i class="fa-solid fa-diagram-project"></i> 3. The 5-Step Pull Request Lifecycle</h2>
+          
+          <!-- Flowchart Card -->
+          <div class="docs-flowchart-box">
+            <div class="flow-step">
+              <div class="flow-num">1</div>
+              <div class="flow-title">Upstream Repo</div>
+              <div class="flow-desc">Original project on GitHub</div>
+            </div>
+            <i class="fa-solid fa-arrow-right flow-arrow"></i>
+            <div class="flow-step">
+              <div class="flow-num">2</div>
+              <div class="flow-title">Your Fork</div>
+              <div class="flow-desc">Personal copy on GitHub</div>
+            </div>
+            <i class="fa-solid fa-arrow-right flow-arrow"></i>
+            <div class="flow-step">
+              <div class="flow-num">3</div>
+              <div class="flow-title">Local Machine</div>
+              <div class="flow-desc">VS Code & feature branch</div>
+            </div>
+            <i class="fa-solid fa-arrow-right flow-arrow"></i>
+            <div class="flow-step">
+              <div class="flow-num">4</div>
+              <div class="flow-title">Pull Request</div>
+              <div class="flow-desc">GitHub diff review</div>
+            </div>
+            <i class="fa-solid fa-arrow-right flow-arrow"></i>
+            <div class="flow-step">
+              <div class="flow-num">5</div>
+              <div class="flow-title">Merged!</div>
+              <div class="flow-desc">Merged into main repo</div>
+            </div>
+          </div>
+
+          <div class="docs-sub-step">
+            <h3>Step 1: Forking (Your Personal Copy)</h3>
+            <p>Creating your personal copy of a repository under your GitHub account (e.g. forking <code>Ghostofzenin08/Game--Development-In-Python</code> to <code>parthongit89/Game--Development-In-Python</code>).</p>
+          </div>
+
+          <div class="docs-sub-step">
+            <h3>Step 2: Branching (Isolated Workspace)</h3>
+            <p>Creating a dedicated feature branch so work remains isolated from the <code>main</code> branch:</p>
+            <div class="code-block">
+              <code id="cmd-branch">git checkout -b refactor-galaxy-shooters</code>
+              <button class="copy-btn" data-copy="cmd-branch" aria-label="Copy command"><i class="fa-regular fa-copy"></i></button>
+            </div>
+          </div>
+
+          <div class="docs-sub-step">
+            <h3>Step 3: Committing & Pushing (Saving Changes)</h3>
+            <p>Saving work locally and pushing to your personal GitHub fork:</p>
+            <div class="code-block">
+              <code id="cmd-push">git add . && git commit -m "Refactor Galaxy Shooters controls & HUD" && git push origin feature-branch</code>
+              <button class="copy-btn" data-copy="cmd-push" aria-label="Copy command"><i class="fa-regular fa-copy"></i></button>
+            </div>
+          </div>
+
+          <div class="docs-sub-step">
+            <h3>Step 4: Opening the Pull Request</h3>
+            <p>Navigating to GitHub, clicking <strong>"Compare & Pull Request"</strong>, and providing a comprehensive description of changes.</p>
+          </div>
+
+          <div class="docs-sub-step">
+            <h3>Step 5: Code Review & Merging</h3>
+            <p>The maintainer reviews diffs, runs tests, approves the PR, and clicks <strong>"Merge Pull Request"</strong>.</p>
+          </div>
+
+          <h2 class="docs-h2"><i class="fa-solid fa-terminal"></i> 4. Git Command Cheat Sheet</h2>
+          <div class="table-responsive">
+            <table class="docs-table">
+              <thead>
+                <tr>
+                  <th>Action</th>
+                  <th>Command</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Check Status</strong></td>
+                  <td><code>git status</code></td>
+                  <td>Displays modified or uncommitted files</td>
+                </tr>
+                <tr>
+                  <td><strong>Create Branch</strong></td>
+                  <td><code>git checkout -b &lt;name&gt;</code></td>
+                  <td>Creates and switches to a new branch</td>
+                </tr>
+                <tr>
+                  <td><strong>Stage Changes</strong></td>
+                  <td><code>git add .</code></td>
+                  <td>Stages all working directory changes</td>
+                </tr>
+                <tr>
+                  <td><strong>Commit Changes</strong></td>
+                  <td><code>git commit -m "Message"</code></td>
+                  <td>Saves staged changes with a commit message</td>
+                </tr>
+                <tr>
+                  <td><strong>Push Branch</strong></td>
+                  <td><code>git push origin &lt;name&gt;</code></td>
+                  <td>Uploads local branch to remote repository</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Doc Section 2: Galaxy Shooters Architecture -->
+      <section id="galaxy-shooters-arch" class="docs-section">
+        <div class="docs-card">
+          <div class="docs-badge"><i class="fa-solid fa-rocket"></i> Technical Spec</div>
+          <h1 class="docs-h1">🚀 Galaxy Shooters — Game Architecture & Systems</h1>
+          <p class="docs-lead">
+            Detailed breakdown of control mechanics, procedural particle flame streams, display scaling, and progressive AI wave algorithms in <code>src/Galaxy_shooters/game.py</code>.
+          </p>
+
+          <hr class="docs-divider">
+
+          <h2 class="docs-h2"><i class="fa-solid fa-gamepad"></i> 1. Control Systems & Input Mapping</h2>
+          <p>
+            Galaxy Shooters features a hybrid control engine allowing seamless keyboard and mouse coordination:
+          </p>
+          <div class="table-responsive">
+            <table class="docs-table">
+              <thead>
+                <tr>
+                  <th>Action</th>
+                  <th>Primary Key</th>
+                  <th>Secondary Input</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Ship Movement</strong></td>
+                  <td><code>W / A / S / D</code></td>
+                  <td>Arrow Keys (<code>Up / Left / Down / Right</code>)</td>
+                </tr>
+                <tr>
+                  <td><strong>Laser Cannon</strong></td>
+                  <td><code>Spacebar</code></td>
+                  <td>Left Mouse Click (Hold for Auto-Fire)</td>
+                </tr>
+                <tr>
+                  <td><strong>Display Scale</strong></td>
+                  <td><code>F11 Key</code></td>
+                  <td>Toggle Responsive Fullscreen Mode</td>
+                </tr>
+                <tr>
+                  <td><strong>Audio Control</strong></td>
+                  <td><code>M Key</code></td>
+                  <td>Instant Master Audio Mute / Unmute</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 class="docs-h2"><i class="fa-solid fa-fire"></i> 2. Particle & Flame Stream Engine</h2>
+          <p>
+            The starfighter thruster effect uses a multi-stage dual-nozzle particle generator:
+          </p>
+          <div class="code-block">
+            <code id="code-thruster"># Dual-nozzle thruster coordinates
+left_nozzle = (self.x + 12, self.y + self.height)
+right_nozzle = (self.x + self.width - 12, self.y + self.height)
+# Spawn multi-colored plasma flame particles (orange, cyan, white)</code>
+            <button class="copy-btn" data-copy="code-thruster"><i class="fa-regular fa-copy"></i></button>
+          </div>
+
+          <h2 class="docs-h2"><i class="fa-solid fa-display"></i> 3. Universal Display Scaling</h2>
+          <p>
+            The game renders to a logical 1280x720 internal surface, which is hardware-scaled with smooth bilinear interpolation to fit any screen resolution (1080p, 1440p, 4K) while maintaining strict aspect ratios.
+          </p>
+        </div>
+      </section>
+
+      <!-- Doc Section 3: Pong Specs -->
+      <section id="pong-arch" class="docs-section">
+        <div class="docs-card">
+          <div class="docs-badge"><i class="fa-solid fa-table-tennis-paddle-ball"></i> Technical Spec</div>
+          <h1 class="docs-h1">🏓 Enhanced Pong — Technical Architecture</h1>
+          <p class="docs-lead">
+            Architectural summary of <code>src/Pong/game.py</code> featuring zero-dependency procedural audio synthesis, predictive AI tracking, and custom score persistence.
+          </p>
+
+          <hr class="docs-divider">
+
+          <h2 class="docs-h2"><i class="fa-solid fa-wave-square"></i> Procedural Audio Engine</h2>
+          <p>
+            Bounce sound effects are synthesized in-memory using Python's <code>math.sin</code> sound wave byte generation, eliminating external WAV/MP3 asset dependencies.
+          </p>
+        </div>
+      </section>
+
+      <!-- Doc Section 4: Taglines & Marketing -->
+      <section id="taglines-guide" class="docs-section">
+        <div class="docs-card">
+          <div class="docs-badge"><i class="fa-solid fa-bullhorn"></i> Marketing Kit</div>
+          <h1 class="docs-h1">⚡ Taglines & Marketing Reference</h1>
+          <p class="docs-lead">
+            Curated slogans, hero titles, and portfolio descriptions for social media showcases.
+          </p>
+
+          <hr class="docs-divider">
+
+          <h2 class="docs-h2"><i class="fa-solid fa-bolt"></i> Ultra-Short Punchlines</h2>
+          <ul class="docs-list">
+            <li><em>"Blast. Dodge. Conquer the Galaxy."</em></li>
+            <li><em>"Retro Arcade. Modern Plasma Power."</em></li>
+            <li><em>"Dominate the Deep Space Arena."</em></li>
+            <li><em>"Outsmart the AI. Own the Stars."</em></li>
+          </ul>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>&copy; 2026 <strong>Galaxy Shooters Documentation Hub</strong> by <a href="https://github.com/Ghostofzenin08" target="_blank">@harshalGamearena</a>. All rights reserved.</p>
+  </footer>
+
+  <!-- Main JavaScript File -->
+  <script src="script.js"></script>
+</body>
+</html>
