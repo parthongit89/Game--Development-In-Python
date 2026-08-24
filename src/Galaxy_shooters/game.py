@@ -727,14 +727,21 @@ class GalaxyShootersGame:
 
     def apply_level_config(self):
         cfg = UNLIMITED_CONFIG.get(self.difficulty, UNLIMITED_CONFIG["simple"])
+        health_bonus = (self.wave_count - 1) * 2
         self.yellow.health = self.yellow.max_health
+        self.yellow.rect.x = 100
         self.yellow.rect.y = 300
-        self.red.max_health = cfg["max_health"]
-        self.red.health = cfg["max_health"]
+        self.red.max_health = cfg["max_health"] + health_bonus
+        self.red.health = self.red.max_health
+        self.red.rect.x = 700
         self.red.rect.y = 300
+        self.yellow.effects.clear()
+        self.red.effects.clear()
         self.yellow_bullets.clear()
         self.red_bullets.clear()
         self.powerups.clear()
+        self.flashes.clear()
+        self.explosions.clear()
 
     def reset_match(self):
         now = pygame.time.get_ticks()
