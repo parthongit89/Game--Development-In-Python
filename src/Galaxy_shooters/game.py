@@ -514,6 +514,7 @@ class AudioManager:
     """Manages game audio, sound effects, and background music playback."""
 
     def __init__(self):
+        self.sound_enabled = True
         self.laser_sound = pygame.mixer.Sound(os.path.join(SOUND_DIR, "laser_GS.mp3"))
         self.hit_sound = pygame.mixer.Sound(os.path.join(SOUND_DIR, "damage_GS.mp3"))
         self.victory_sound = pygame.mixer.Sound(os.path.join(SOUND_DIR, "victory_GS.mp3"))
@@ -521,24 +522,43 @@ class AudioManager:
         self.victory_channel = pygame.mixer.Channel(0)
         self.bg_music_path = os.path.join(SOUND_DIR, "background_GS.mp3")
 
+    def set_enabled(self, enabled: bool):
+        self.sound_enabled = enabled
+        if not enabled:
+            pygame.mixer.music.pause()
+            pygame.mixer.stop()
+        else:
+            if pygame.mixer.music.get_busy():
+                pygame.mixer.music.unpause()
+            else:
+                self.play_music()
+
     def play_music(self):
-        pygame.mixer.music.load(self.bg_music_path)
-        pygame.mixer.music.set_volume(0.35)
-        pygame.mixer.music.play(-1)
+        if not self.sound_enabled:
+            return
+        try:
+            pygame.mixer.music.load(self.bg_music_path)
+            pygame.mixer.music.set_volume(0.35)
+            pygame.mixer.music.play(-1)
+        except Exception:
+            pass
 
     def fadeout_music(self, ms: int = 250):
-        pygame.mixer.music.fadeout(ms)
+        try:
+            pygame.mixer.music.fadeout(ms)
+        except Exception:
+            pass
 
     def play_laser(self, enabled: bool = True):
-        if enabled:
+        if self.sound_enabled and enabled:
             self.laser_sound.play()
 
     def play_hit(self, enabled: bool = True):
-        if enabled:
+        if self.sound_enabled and enabled:
             self.hit_sound.play()
 
     def play_victory(self, enabled: bool = True):
-        if enabled:
+        if self.sound_enabled and enabled:
             self.victory_channel.play(self.victory_sound)
 
 
@@ -737,6 +757,10 @@ class GalaxyShootersGame:
         self.audio.play_music()
         self.state = "playing"
 
+    def toggle_sound(self):
+        self.sound_enabled = not self.sound_enabled
+        self.audio.set_enabled(self.sound_enabled)
+
     def handle_events(self, now: int):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -799,7 +823,7 @@ class GalaxyShootersGame:
                                 self.apply_level_config()
                                 self.is_paused = False
                             elif btn_sound.collidepoint(mx, my):
-                                self.sound_enabled = not self.sound_enabled
+                                self.toggle_sound()
                             elif btn_screen.collidepoint(mx, my):
                                 self.toggle_fullscreen()
                             elif btn_menu.collidepoint(mx, my):
@@ -816,6 +840,14 @@ class GalaxyShootersGame:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_F11 or (event.key == pygame.K_f and (pygame.key.get_mods() & pygame.KMOD_ALT)):
                     self.toggle_fullscreen()
+
+                if self.is_paused:
+                    if event.key == pygame.K_s:
+                        self.toggle_sound()
+                    elif event.key == pygame.K_m:
+                        self.save_high_score()
+                        self.state = "menu"
+                        self.is_paused = False
 
                 if self.state == "menu":
                     if event.key == pygame.K_1:
