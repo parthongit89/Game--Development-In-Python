@@ -283,6 +283,7 @@ python src/Pong/pong.py
 ## 👨‍💻 Author & Connect
 
 **Harshal**
+- **Email:** [harshalsonawane308@gmail.com](mailto:harshalsonawane308@gmail.com)
 - **GitHub:** [@Ghostofzenin08](https://github.com/Ghostofzenin08)
 - **Portfolio Goal:** Mastering Python software architecture, real-time algorithms, and creative game engineering.
 
