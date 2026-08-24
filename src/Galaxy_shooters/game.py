@@ -562,16 +562,6 @@ class GalaxyShootersGame:
         pygame.display.set_caption("Galaxy Shooters")
         self.clock = pygame.time.Clock()
 
-    def toggle_fullscreen(self):
-        self.is_fullscreen = not self.is_fullscreen
-        try:
-            if self.is_fullscreen:
-                self.window = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN | pygame.SCALED)
-            else:
-                self.window = pygame.display.set_mode((WIDTH, HEIGHT), pygame.SCALED)
-        except Exception:
-            pass
-
         # Fonts
         self.health_font = pygame.font.SysFont("comicsans", 30)
         self.health_small_font = pygame.font.SysFont("comicsans", 20)
@@ -681,6 +671,16 @@ class GalaxyShootersGame:
         self.hit_player = None
         self.hit_feedback_until = 0
         self.next_powerup_spawn = 0
+
+    def toggle_fullscreen(self):
+        self.is_fullscreen = not self.is_fullscreen
+        try:
+            if self.is_fullscreen:
+                self.window = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN | pygame.SCALED)
+            else:
+                self.window = pygame.display.set_mode((WIDTH, HEIGHT), pygame.SCALED)
+        except Exception:
+            pass
 
     def load_high_score(self) -> int:
         try:
