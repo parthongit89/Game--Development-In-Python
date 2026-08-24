@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galaxy Shooters — Official Website | @harshalGamearena</title>
+  
+  <!-- Google Fonts: Intel One Mono, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Intel+One+Mono:wght@400;500;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Background Space Canvas Particles -->
+  <canvas id="space-canvas"></canvas>
+
+  <!-- Top Equalizer Spectrum Bar -->
+  <div class="equalizer-container" id="equalizer-bars">
+    <!-- Generated dynamically by script.js -->
+  </div>
+
+  <!-- Header & Navigation Bar -->
+  <header class="site-header">
+    <nav class="navigations" aria-label="Main Navigation">
+      <a href="#home" class="nav-btn active" data-target="home">Home</a>
+      <a href="#about" class="nav-btn" data-target="about">About Game</a>
+      <a href="#support" class="nav-btn" data-target="support">Support</a>
+      <a href="#contribute" class="nav-btn" data-target="contribute">Contribute</a>
+      <a href="#developers" class="nav-btn" data-target="developers">Developer’s</a>
+    </nav>
+  </header>
+
+  <!-- Main Content Wrapper -->
+  <main>
+    
+    <!-- Hero Section -->
+    <section id="home" class="section hero-section">
+      <div class="hero-content">
+        <h1 class="hero-tagline">"Dominate the Deep Space Arena."</h1>
+        
+        <div class="credits-card">
+          <p class="author-handle">@harshalGamearena</p>
+          <p class="powered-by">Powered by</p>
+          <p class="game-title">Galaxy Shooters</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Game Visuals Section -->
+    <section id="visuals" class="section visuals-section">
+      <div class="visuals-container">
+        <div class="visuals-header">
+          <h2 class="visuals-label"><i class="fa-solid fa-gamepad"></i> Game Visuals</h2>
+        </div>
+        
+        <!-- Interactive Screenshot Gallery Slider -->
+        <div class="gallery-wrapper">
+          <div class="gallery-stage" id="gallery-stage">
+            <div class="slide active">
+              <img src="src/Galaxy_shooters/assets/images/galaxy_shooters_wave_action.png" alt="Galaxy Shooters Unlimited Wave Combat" class="visual-img">
+              <div class="slide-caption">Galaxy Shooters - Unlimited Wave Mode & High Score Arena</div>
+            </div>
+            <div class="slide">
+              <img src="src/Galaxy_shooters/assets/images/image.png" alt="Galaxy Shooters Gameplay Showcase" class="visual-img">
+              <div class="slide-caption">Galaxy Shooters - Intensive 2D Space Combat & Power-Up System</div>
+            </div>
+            <div class="slide">
+              <img src="hero 2.png" alt="Player Starfighter Sprite Design" class="visual-img sprite-view">
+              <div class="slide-caption">Yellow Starfighter Asset Texture</div>
+            </div>
+            <div class="slide">
+              <img src="enemy.png" alt="Enemy Interceptor Sprite Design" class="visual-img sprite-view">
+              <div class="slide-caption">Red Interceptor Asset Texture</div>
+            </div>
+            <div class="slide">
+              <img src="src/Galaxy_shooters/assets/images/background_GS.png" alt="Deep Space Nebula Background" class="visual-img">
+              <div class="slide-caption">Procedural Deep Space Parallax Arena</div>
+            </div>
+          </div>
+
+          <!-- Slider Controls -->
+          <button class="gallery-prev" id="gallery-prev" aria-label="Previous Slide"><i class="fa-solid fa-chevron-left"></i></button>
+          <button class="gallery-next" id="gallery-next" aria-label="Next Slide"><i class="fa-solid fa-chevron-right"></i></button>
+          
+          <div class="gallery-dots" id="gallery-dots">
+            <span class="dot active" data-index="0"></span>
+            <span class="dot" data-index="1"></span>
+            <span class="dot" data-index="2"></span>
+            <span class="dot" data-index="3"></span>
+            <span class="dot" data-index="4"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Action Buttons Section (Play Online & Download) -->
+    <section id="download" class="section download-section">
+      <div class="action-buttons-wrapper">
+        <button class="play-online-btn" id="open-play-modal">
+          <i class="fa-solid fa-gamepad"></i> Play Online (Browser)
+        </button>
+        <button class="download-btn" id="open-download-modal">
+          <i class="fa-solid fa-download"></i> Download Game
+        </button>
+      </div>
+    </section>
+
+    <!-- About Game Section -->
+    <section id="about" class="section about-section">
+      <h2 class="section-title">About Game</h2>
+
+      <p class="game-description">
+        Galaxy Shooters is a high-action 2D space duel game where two starfighters battle across territorial airspace with laser cannons, energy shields, and tactical drops.
+      </p>
+
+      <div class="features-list">
+
+        <!-- Feature 1 -->
+        <div class="feature-card">
+          <h3 class="feature-title"><i class="fa-solid fa-brain"></i> Intelligent Reactive AI</h3>
+          <ol class="feature-steps">
+            <li>Automatically tracks opponent vertical coordinates.</li>
+            <li>Detects incoming enemy lasers and computes evasion trajectories to dodge danger.</li>
+            <li>Scans for battlefield power-ups and moves to collect them.</li>
+            <li>Automatically calculates optimal firing intervals.</li>
+          </ol>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="feature-card">
+          <h3 class="feature-title"><i class="fa-solid fa-shield-halved"></i> Dynamic Health & Shield System</h3>
+          <ol class="feature-steps">
+            <li>Live animated health bars for both combatants.</li>
+            <li>Temporary energy barrier absorbs incoming projectile damage.</li>
+          </ol>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="feature-card">
+          <h3 class="feature-title"><i class="fa-solid fa-wand-magic-sparkles"></i> Procedural Graphics & Shader Effects</h3>
+          <ol class="feature-steps">
+            <li>Multi-layered glowing laser surfaces rendered in real time.</li>
+            <li>Directional muzzle flashes when blasters fire.</li>
+            <li>Expanding shockwave and particle blast effects on projectile impact.</li>
+          </ol>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="feature-card">
+          <h3 class="feature-title"><i class="fa-solid fa-volume-high"></i> Full Audio System</h3>
+          <p class="feature-paragraph">
+            Handling background soundtrack, laser fire, impact explosions, and victory jingles.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Contribute Section -->
+    <section id="contribute" class="section contribute-section">
+      <h2 class="section-title">Contribute</h2>
+      <div class="contribute-card">
+        <p class="contribute-intro">
+          Join the development! We welcome pull requests for new power-ups, enhanced AI algorithms, multi-player network protocols, and retro sound synthesis engines.
+        </p>
+        <div class="contribute-steps">
+          <div class="c-step">
+            <span class="step-num">01</span>
+            <div class="step-info">
+              <h4>Fork & Clone</h4>
+              <p>Fork the repository on GitHub and clone locally to start working.</p>
+            </div>
+          </div>
+          <div class="c-step">
+            <span class="step-num">02</span>
+            <div class="step-info">
+              <h4>Create Feature Branch</h4>
+              <p>Follow standard git conventions (`feature/your-feature-name`).</p>
+            </div>
+          </div>
+          <div class="c-step">
+            <span class="step-num">03</span>
+            <div class="step-info">
+              <h4>Submit Pull Request</h4>
+              <p>Ensure modular tests pass and follow the <a href="GIT_PULL_REQUEST_GUIDE.md" target="_blank" class="link-highlight">PR Guide</a>.</p>
+            </div>
+          </div>
+        </div>
+        <div class="github-actions">
+          <a href="https://github.com/Ghostofzenin08/Game--Development-In-Python" target="_blank" class="gh-btn">
+            <i class="fa-brands fa-github"></i> View GitHub Repository
+          </a>
+          <a href="GIT_PULL_REQUEST_GUIDE.md" target="_blank" class="gh-btn secondary">
+            <i class="fa-solid fa-book"></i> Read PR Guidelines
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Developer's Section -->
+    <section id="developers" class="section developers-section">
+      <h2 class="section-title">Developer’s</h2>
+      <div class="developer-card">
+        <div class="dev-avatar">
+          <i class="fa-solid fa-user-astronaut"></i>
+        </div>
+        <div class="dev-details">
+          <h3 class="dev-name">Harshal</h3>
+          <p class="dev-tag">@harshalGamearena | @Ghostofzenin08</p>
+          <p class="dev-bio">
+            Game Engineering & Software Architecture enthusiast specializing in Python, Pygame, real-time physics simulations, reactive AI heuristics, and procedural graphics synthesis.
+          </p>
+          <div class="tech-stack-pills">
+            <span>Python 3.8+</span>
+            <span>Pygame 2.5+</span>
+            <span>OOP Architecture</span>
+            <span>Procedural Audio</span>
+            <span>Reactive AI</span>
+            <span>60 FPS Game Loop</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Support Section -->
+    <section id="support" class="section support-section">
+      <h2 class="section-title">Support</h2>
+
+      <form class="support-form" id="support-form" novalidate>
+        <div class="form-group">
+          <label for="email-input" class="sr-only">Enter Email</label>
+          <input type="email" id="email-input" class="form-input" placeholder="Enter Email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="comments-input" class="sr-only">Comments</label>
+          <textarea id="comments-input" class="form-textarea" placeholder="Comments" rows="5" required></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn" id="send-email-btn">Send Email</button>
+      </form>
+    </section>
+
+  </main>
+
+  <!-- Download Modal -->
+  <div class="modal-overlay" id="download-modal" aria-hidden="true">
+    <div class="modal-content">
+      <button class="modal-close" id="close-download-modal" aria-label="Close modal">&times;</button>
+      <h3 class="modal-title"><i class="fa-solid fa-rocket"></i> Get Galaxy Shooters</h3>
+      <p class="modal-sub">Choose your preferred method to get started with the game:</p>
+
+      <div class="download-options">
+
+        <!-- Option 1: Git Clone -->
+        <div class="option-box">
+          <div class="option-header">
+            <i class="fa-brands fa-git-alt"></i>
+            <h4>Clone via Repository</h4>
+          </div>
+          <div class="code-block">
+            <code id="clone-cmd">git clone https://github.com/Ghostofzenin08/Game--Development-In-Python.git</code>
+            <button class="copy-btn" data-copy="clone-cmd" title="Copy Command"><i class="fa-regular fa-copy"></i></button>
+          </div>
+        </div>
+
+        <!-- Option 2: Run directly -->
+        <div class="option-box">
+          <div class="option-header">
+            <i class="fa-solid fa-terminal"></i>
+            <h4>Run via Python Terminal</h4>
+          </div>
+          <div class="code-block mb-8">
+            <code id="run-cmd-1">pip install -r src/Galaxy_shooters/requirements.txt</code>
+            <button class="copy-btn" data-copy="run-cmd-1" title="Copy Command"><i class="fa-regular fa-copy"></i></button>
+          </div>
+          <div class="code-block">
+            <code id="run-cmd-2">python src/Galaxy_shooters/game.py</code>
+            <button class="copy-btn" data-copy="run-cmd-2" title="Copy Command"><i class="fa-regular fa-copy"></i></button>
+          </div>
+        </div>
+
+        <!-- Option 3: Download ZIP -->
+        <div class="option-box">
+          <div class="option-header">
+            <i class="fa-solid fa-file-zipper"></i>
+            <h4>Direct ZIP Archive</h4>
+          </div>
+          <a href="https://github.com/Ghostofzenin08/Game--Development-In-Python/archive/refs/heads/main.zip" class="modal-action-btn">
+            <i class="fa-solid fa-download"></i> Download Source Code (.ZIP)
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Play Online WebAssembly Modal -->
+  <div class="modal-overlay" id="play-game-modal" aria-hidden="true">
+    <div class="game-modal-content">
+      <button class="modal-close" id="close-play-modal" aria-label="Close game">&times;</button>
+      <h3 class="modal-title"><i class="fa-solid fa-gamepad"></i> Play Galaxy Shooters Online</h3>
+      <div class="iframe-wrapper">
+        <iframe id="game-iframe" data-src="src/Galaxy_shooters/build/web/index.html" title="Galaxy Shooters Web Game" allow="autoplay; fullscreen"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox Modal for Screenshots -->
+  <div class="modal-overlay" id="lightbox-modal" aria-hidden="true">
+    <div class="lightbox-content">
+      <button class="modal-close" id="close-lightbox" aria-label="Close preview">&times;</button>
+      <img src="" alt="Enlarged Game Visual" id="lightbox-img">
+      <div id="lightbox-caption" class="lightbox-caption"></div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>&copy; 2026 <strong>Galaxy Shooters</strong> by <a href="https://github.com/Ghostofzenin08" target="_blank">@harshalGamearena</a>. Built with Python & Pygame. All rights reserved.</p>
+  </footer>
+
+  <!-- Main JavaScript File -->
+  <script src="script.js"></script>
+</body>
+</html>
