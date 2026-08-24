@@ -393,57 +393,98 @@ main {
   display: flex;
   gap: 24px;
   justify-content: center;
-  align-items: center;
+  align-items: stretch;
   flex-wrap: wrap;
   width: 100%;
 }
 
-.play-online-btn {
-  display: inline-flex;
-  flex-direction: column;
+.action-btn {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: min(480px, 90vw);
-  height: 100px;
-  background: linear-gradient(135deg, #0056b3 0%, #002d62 100%);
-  border-radius: var(--border-radius-md);
-  color: var(--text-white);
-  font-family: var(--font-mono);
-  font-size: clamp(1.4rem, 2.5vw, 2.2rem);
-  font-weight: 700;
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  justify-content: flex-start;
+  gap: 18px;
+  width: min(440px, 90vw);
+  padding: 18px 24px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
   cursor: pointer;
-  box-shadow: 0 0 20px rgba(0, 102, 255, 0.4), var(--white-shadow);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 255, 255, 0.08);
+}
+
+.play-online-btn {
+  background: linear-gradient(135deg, #0d52bf 0%, #062b66 100%);
+  border-color: rgba(13, 110, 253, 0.5);
+  box-shadow: 0 8px 30px rgba(13, 82, 191, 0.35), 0 0 15px rgba(13, 110, 253, 0.2);
 }
 
 .play-online-btn:hover {
-  background: linear-gradient(135deg, #0066cc 0%, #003d80 100%);
+  background: linear-gradient(135deg, #1260de 0%, #093780 100%);
   transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 0 30px rgba(0, 140, 255, 0.8), var(--white-shadow);
+  box-shadow: 0 12px 35px rgba(18, 96, 222, 0.5), 0 0 25px rgba(13, 110, 253, 0.4);
 }
 
-.coming-soon-badge {
+.download-btn {
+  background: linear-gradient(135deg, #0f7a3f 0%, #084724 100%);
+  border-color: rgba(25, 135, 84, 0.5);
+  box-shadow: 0 8px 30px rgba(15, 122, 63, 0.35), 0 0 15px rgba(25, 135, 84, 0.2);
+}
+
+.download-btn:hover {
+  background: linear-gradient(135deg, #14914c 0%, #0a5a2e 100%);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 35px rgba(20, 145, 76, 0.5), 0 0 25px rgba(25, 135, 84, 0.4);
+}
+
+.btn-icon {
+  font-size: 2.2rem;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.btn-text-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.btn-title {
+  font-family: var(--font-mono);
+  font-size: clamp(1.2rem, 2vw, 1.45rem);
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.coming-soon-pill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 0.8rem;
+  gap: 5px;
+  font-size: 0.7rem;
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
   background: #ffcc00;
   color: #000000;
-  padding: 4px 12px;
-  border-radius: 12px;
+  padding: 2px 9px;
+  border-radius: 8px;
   text-transform: uppercase;
-  box-shadow: 0 0 10px rgba(255, 204, 0, 0.6);
+  box-shadow: 0 0 8px rgba(255, 204, 0, 0.5);
   animation: pulseBadge 2s infinite alternate;
+}
+
+.btn-subtitle {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 400;
 }
 
 @keyframes pulseBadge {
   0% { transform: scale(1); opacity: 0.9; }
-  100% { transform: scale(1.06); opacity: 1; box-shadow: 0 0 16px rgba(255, 204, 0, 1); }
+  100% { transform: scale(1.06); opacity: 1; box-shadow: 0 0 14px rgba(255, 204, 0, 0.9); }
 }
 
 .coming-soon-wrapper {
@@ -470,31 +511,6 @@ main {
 .coming-soon-actions {
   width: 100%;
   margin-top: 15px;
-}
-
-.download-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  width: min(480px, 90vw);
-  height: 100px;
-  background-color: var(--btn-green);
-  border-radius: var(--border-radius-md);
-  color: var(--text-white);
-  font-family: var(--font-mono);
-  font-size: clamp(2rem, 3.5vw, 3rem); /* ~48px */
-  font-weight: 500;
-  border: none;
-  cursor: pointer;
-  box-shadow: var(--white-shadow);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.download-btn:hover {
-  background-color: var(--btn-green-hover);
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0px 8px 25px rgba(255, 255, 255, 0.9), var(--green-glow);
 }
 
 .download-btn:active {
