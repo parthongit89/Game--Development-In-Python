@@ -209,16 +209,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const playBtn = document.getElementById('open-play-modal');
   const playModal = document.getElementById('play-game-modal');
   const closePlayBtn = document.getElementById('close-play-modal');
-  const gameIframe = document.getElementById('game-iframe');
+  const switchToDownloadBtn = document.getElementById('switch-to-download');
 
   if (playBtn && playModal) {
     playBtn.addEventListener('click', () => {
-      if (gameIframe && !gameIframe.src) {
-        const dataSrc = gameIframe.getAttribute('data-src');
-        if (dataSrc) {
-          gameIframe.src = dataSrc;
-        }
-      }
+      showToast('🚀 Play Online (Browser) is Coming Soon! Check back soon.');
       playModal.classList.add('active');
       playModal.setAttribute('aria-hidden', 'false');
     });
@@ -228,18 +223,24 @@ document.addEventListener('DOMContentLoaded', () => {
     closePlayBtn.addEventListener('click', () => {
       playModal.classList.remove('active');
       playModal.setAttribute('aria-hidden', 'true');
-      if (gameIframe) {
-        gameIframe.src = '';
-      }
     });
 
     playModal.addEventListener('click', e => {
       if (e.target === playModal) {
         playModal.classList.remove('active');
         playModal.setAttribute('aria-hidden', 'true');
-        if (gameIframe) {
-          gameIframe.src = '';
-        }
+      }
+    });
+  }
+
+  if (switchToDownloadBtn && playModal) {
+    switchToDownloadBtn.addEventListener('click', () => {
+      playModal.classList.remove('active');
+      playModal.setAttribute('aria-hidden', 'true');
+      const downloadModal = document.getElementById('download-modal');
+      if (downloadModal) {
+        downloadModal.classList.add('active');
+        downloadModal.setAttribute('aria-hidden', 'false');
       }
     });
   }

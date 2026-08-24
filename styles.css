@@ -400,27 +400,76 @@ main {
 
 .play-online-btn {
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 8px;
   width: min(480px, 90vw);
   height: 100px;
   background: linear-gradient(135deg, #0056b3 0%, #002d62 100%);
   border-radius: var(--border-radius-md);
   color: var(--text-white);
   font-family: var(--font-mono);
-  font-size: clamp(1.6rem, 2.8vw, 2.5rem);
+  font-size: clamp(1.4rem, 2.5vw, 2.2rem);
   font-weight: 700;
   border: 1px solid rgba(255, 255, 255, 0.4);
   cursor: pointer;
   box-shadow: 0 0 20px rgba(0, 102, 255, 0.4), var(--white-shadow);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
 }
 
 .play-online-btn:hover {
   background: linear-gradient(135deg, #0066cc 0%, #003d80 100%);
   transform: translateY(-4px) scale(1.02);
   box-shadow: 0 0 30px rgba(0, 140, 255, 0.8), var(--white-shadow);
+}
+
+.coming-soon-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  background: #ffcc00;
+  color: #000000;
+  padding: 4px 12px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  box-shadow: 0 0 10px rgba(255, 204, 0, 0.6);
+  animation: pulseBadge 2s infinite alternate;
+}
+
+@keyframes pulseBadge {
+  0% { transform: scale(1); opacity: 0.9; }
+  100% { transform: scale(1.06); opacity: 1; box-shadow: 0 0 16px rgba(255, 204, 0, 1); }
+}
+
+.coming-soon-wrapper {
+  text-align: center;
+  padding: 30px 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.coming-soon-icon {
+  font-size: 4rem;
+  color: #ffcc00;
+  margin-bottom: 10px;
+  animation: floatRocket 3s ease-in-out infinite alternate;
+}
+
+@keyframes floatRocket {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-12px); }
+}
+
+.coming-soon-actions {
+  width: 100%;
+  margin-top: 15px;
 }
 
 .download-btn {

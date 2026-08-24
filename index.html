@@ -104,7 +104,8 @@
     <section id="download" class="section download-section">
       <div class="action-buttons-wrapper">
         <button class="play-online-btn" id="open-play-modal">
-          <i class="fa-solid fa-gamepad"></i> Play Online (Browser)
+          <span><i class="fa-solid fa-gamepad"></i> Play Online (Browser)</span>
+          <span class="coming-soon-badge"><i class="fa-solid fa-clock"></i> Coming Soon</span>
         </button>
         <button class="download-btn" id="open-download-modal">
           <i class="fa-solid fa-download"></i> Download Game
@@ -304,11 +305,17 @@
 
   <!-- Play Online WebAssembly Modal -->
   <div class="modal-overlay" id="play-game-modal" aria-hidden="true">
-    <div class="game-modal-content">
-      <button class="modal-close" id="close-play-modal" aria-label="Close game">&times;</button>
-      <h3 class="modal-title"><i class="fa-solid fa-gamepad"></i> Play Galaxy Shooters Online</h3>
-      <div class="iframe-wrapper">
-        <iframe id="game-iframe" data-src="src/Galaxy_shooters/build/web/index.html" title="Galaxy Shooters Web Game" allow="autoplay; fullscreen"></iframe>
+    <div class="modal-content coming-soon-modal">
+      <button class="modal-close" id="close-play-modal" aria-label="Close modal">&times;</button>
+      <div class="coming-soon-wrapper">
+        <i class="fa-solid fa-rocket coming-soon-icon"></i>
+        <h3 class="modal-title">Play Online — Coming Soon!</h3>
+        <p class="modal-sub">The browser WebAssembly edition of <strong>Galaxy Shooters</strong> is currently under active development. Stay tuned for the upcoming web release!</p>
+        <div class="coming-soon-actions">
+          <button class="modal-action-btn" id="switch-to-download">
+            <i class="fa-solid fa-download"></i> Download & Play Desktop Version
+          </button>
+        </div>
       </div>
     </div>
   </div>
