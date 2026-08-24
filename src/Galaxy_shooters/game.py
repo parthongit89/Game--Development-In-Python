@@ -22,8 +22,8 @@ VEL = 6
 BULLET_VEL = 9
 MAX_BULLETS = 4
 MAX_HEALTH = 10
-HEALTH_BAR_WIDTH = 220
-HEALTH_BAR_HEIGHT = 18
+HEALTH_BAR_WIDTH = 200
+HEALTH_BAR_HEIGHT = 16
 
 POWERUP_SIZE = 28
 POWERUP_SPAWN_MS = 6000
@@ -188,7 +188,7 @@ class FloatingText:
     def draw(self, surface: pygame.Surface, font: pygame.font.Font, now: int):
         age = now - self.created_at
         progress = age / self.duration_ms
-        alpha = int(255 * (1 - progress))
+        alpha = max(0, min(255, int(255 * (1 - progress))))
 
         rendered = font.render(self.text, True, self.color)
         layer = pygame.Surface((rendered.get_width(), rendered.get_height()), pygame.SRCALPHA)
@@ -198,31 +198,55 @@ class FloatingText:
 
 
 class ThrusterParticle:
-    """Sparkling exhaust flames behind accelerating spaceships."""
+    """High-quality plasma flame and exhaust particle trail for spaceship thrusters."""
 
-    def __init__(self, x: float, y: float, color: tuple, direction: int):
+    def __init__(self, x: float, y: float, core_color: tuple, outer_color: tuple, direction: int, boost: bool = False):
         self.x = x
         self.y = y
-        self.color = color
-        self.vel_x = -direction * random.uniform(2, 5)
-        self.vel_y = random.uniform(-1, 1)
-        self.radius = random.randint(3, 5)
-        self.life = 15
+        self.core_color = core_color
+        self.outer_color = outer_color
+        self.direction = direction
+        self.boost = boost
+
+        mult = 1.6 if boost else 1.0
+        self.vel_x = -direction * random.uniform(3.5, 7.5) * mult
+        self.vel_y = random.uniform(-1.2, 1.2)
+        self.radius = random.uniform(2.5, 4.5)
+        self.max_life = random.randint(14, 22)
+        self.life = self.max_life
 
     def update(self):
         self.x += self.vel_x
         self.y += self.vel_y
-        self.radius = max(0.5, self.radius - 0.2)
+        self.radius = min(9.0, self.radius + 0.25)
         self.life -= 1
 
     def is_alive(self) -> bool:
         return self.life > 0
 
     def draw(self, surface: pygame.Surface):
-        alpha = int((self.life / 15) * 200)
-        layer = pygame.Surface((int(self.radius * 4), int(self.radius * 4)), pygame.SRCALPHA)
-        pygame.draw.circle(layer, (*self.color, alpha), (int(self.radius * 2), int(self.radius * 2)), int(self.radius))
-        surface.blit(layer, (self.x - self.radius * 2, self.y - self.radius * 2))
+        progress = 1.0 - (self.life / self.max_life)  # 0.0 (new) to 1.0 (dead)
+        alpha = max(0, min(255, int(240 * (1 - progress))))
+
+        # Dynamic color interpolation over particle lifetime
+        if progress < 0.25:
+            color = (255, 255, 240)  # Intense hot core
+        elif progress < 0.65:
+            color = self.core_color
+        else:
+            color = self.outer_color
+
+        size = max(2, int(self.radius * 2.5))
+        layer = pygame.Surface((size * 2, size * 2), pygame.SRCALPHA)
+        center = (size, size)
+
+        # Outer glowing flame aura
+        pygame.draw.circle(layer, (*color, alpha // 3), center, size)
+        # Core intense plasma jet
+        pygame.draw.circle(layer, (*color, alpha), center, max(1, size // 2))
+        pygame.draw.circle(layer, (255, 255, 255, alpha), center, max(1, size // 4))
+
+        surface.blit(layer, (self.x - size, self.y - size))
 
 
 # =====================================================================
@@ -505,14 +529,17 @@ class AudioManager:
     def fadeout_music(self, ms: int = 250):
         pygame.mixer.music.fadeout(ms)
 
-    def play_laser(self):
-        self.laser_sound.play()
+    def play_laser(self, enabled: bool = True):
+        if enabled:
+            self.laser_sound.play()
 
-    def play_hit(self):
-        self.hit_sound.play()
+    def play_hit(self, enabled: bool = True):
+        if enabled:
+            self.hit_sound.play()
 
-    def play_victory(self):
-        self.victory_channel.play(self.victory_sound)
+    def play_victory(self, enabled: bool = True):
+        if enabled:
+            self.victory_channel.play(self.victory_sound)
 
 
 # =====================================================================
@@ -526,9 +553,24 @@ class GalaxyShootersGame:
         pygame.font.init()
         pygame.mixer.init()
 
-        self.window = pygame.display.set_mode((WIDTH, HEIGHT))
+        self.is_fullscreen = True
+        try:
+            self.window = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN | pygame.SCALED)
+        except Exception:
+            self.is_fullscreen = False
+            self.window = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Galaxy Shooters")
         self.clock = pygame.time.Clock()
+
+    def toggle_fullscreen(self):
+        self.is_fullscreen = not self.is_fullscreen
+        try:
+            if self.is_fullscreen:
+                self.window = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN | pygame.SCALED)
+            else:
+                self.window = pygame.display.set_mode((WIDTH, HEIGHT), pygame.SCALED)
+        except Exception:
+            pass
 
         # Fonts
         self.health_font = pygame.font.SysFont("comicsans", 30)
@@ -553,14 +595,14 @@ class GalaxyShootersGame:
 
         yellow_raw = pygame.image.load(os.path.join(ASSET_DIR, "yellow_spaceship.png"))
         self.yellow_img = pygame.transform.rotate(
-            pygame.transform.scale(yellow_raw, (SPACESHIP_WIDTH, SPACESHIP_HEIGHT)),
+            pygame.transform.scale(yellow_raw, (SPACESHIP_HEIGHT, SPACESHIP_WIDTH)),
             270,
         )
 
         red_raw = pygame.image.load(os.path.join(ASSET_DIR, "red_spaceship.png"))
         self.red_img = pygame.transform.rotate(
-            pygame.transform.scale(red_raw, (SPACESHIP_WIDTH, SPACESHIP_HEIGHT)),
-            270,
+            pygame.transform.scale(red_raw, (SPACESHIP_HEIGHT, SPACESHIP_WIDTH)),
+            90,
         )
 
         self.yellow_laser_sprite = LaserSpriteFactory.create(YELLOW, 1)
@@ -680,7 +722,7 @@ class GalaxyShootersGame:
         self.score = 0
         self.yellow.reset(100, 300)
         self.red.reset(700, 300)
-        self.red.is_ai = True
+        self.red.is_ai = (self.game_mode == "ai")
         self.apply_level_config()
         self.flashes.clear()
         self.explosions.clear()
@@ -698,6 +740,7 @@ class GalaxyShootersGame:
     def handle_events(self, now: int):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                self.save_high_score()
                 self.running = False
                 return
 
@@ -715,17 +758,21 @@ class GalaxyShootersGame:
 
                         if btn_simple.collidepoint(mx, my):
                             self.difficulty = "simple"
+                            self.game_mode = "ai"
                             self.reset_match()
                         elif btn_hard.collidepoint(mx, my):
                             self.difficulty = "hard"
+                            self.game_mode = "ai"
                             self.reset_match()
                         elif btn_mode_container.collidepoint(mx, my):
+                            self.game_mode = "ai"
                             self.reset_match()
                         elif btn_two.collidepoint(mx, my):
                             self.floating_texts.append(FloatingText("2-PLAYER MODE COMING SOON!", WIDTH // 2, 255, (255, 215, 0), duration_ms=1800))
                         elif btn_start.collidepoint(mx, my):
                             self.reset_match()
                         elif btn_quit.collidepoint(mx, my):
+                            self.save_high_score()
                             self.running = False
 
                     elif self.state == "game_over":
@@ -737,14 +784,15 @@ class GalaxyShootersGame:
                             self.state = "menu"
 
                     elif self.state == "playing":
-                        btn_nav = pygame.Rect(WIDTH - 135, 12, 120, 34)
+                        btn_nav = pygame.Rect(WIDTH - 125, 12, 110, 34)
                         if btn_nav.collidepoint(mx, my):
                             self.is_paused = not self.is_paused
                         elif self.is_paused:
-                            btn_resume = pygame.Rect(WIDTH // 2 - 150, 180, 300, 46)
-                            btn_restart = pygame.Rect(WIDTH // 2 - 150, 240, 300, 46)
-                            btn_sound = pygame.Rect(WIDTH // 2 - 150, 300, 300, 46)
-                            btn_menu = pygame.Rect(WIDTH // 2 - 150, 360, 300, 46)
+                            btn_resume = pygame.Rect(WIDTH // 2 - 150, 160, 300, 42)
+                            btn_restart = pygame.Rect(WIDTH // 2 - 150, 215, 300, 42)
+                            btn_sound = pygame.Rect(WIDTH // 2 - 150, 270, 300, 42)
+                            btn_screen = pygame.Rect(WIDTH // 2 - 150, 325, 300, 42)
+                            btn_menu = pygame.Rect(WIDTH // 2 - 150, 380, 300, 42)
                             if btn_resume.collidepoint(mx, my):
                                 self.is_paused = False
                             elif btn_restart.collidepoint(mx, my):
@@ -752,7 +800,10 @@ class GalaxyShootersGame:
                                 self.is_paused = False
                             elif btn_sound.collidepoint(mx, my):
                                 self.sound_enabled = not self.sound_enabled
+                            elif btn_screen.collidepoint(mx, my):
+                                self.toggle_fullscreen()
                             elif btn_menu.collidepoint(mx, my):
+                                self.save_high_score()
                                 self.state = "menu"
                                 self.is_paused = False
                         else:
@@ -760,18 +811,21 @@ class GalaxyShootersGame:
                             if bullets:
                                 self.yellow_bullets.extend(bullets)
                                 self.flashes.append(flash)
-                                if self.sound_enabled:
-                                    self.audio.play_laser()
+                                self.audio.play_laser(self.sound_enabled)
 
             if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_F11 or (event.key == pygame.K_f and (pygame.key.get_mods() & pygame.KMOD_ALT)):
+                    self.toggle_fullscreen()
+
                 if self.state == "menu":
                     if event.key == pygame.K_1:
                         self.game_mode = "ai"
                     elif event.key == pygame.K_2:
-                        self.game_mode = "two"
+                        self.floating_texts.append(FloatingText("2-PLAYER MODE COMING SOON!", WIDTH // 2, 255, (255, 215, 0), duration_ms=1800))
                     elif event.key in (pygame.K_RETURN, pygame.K_SPACE):
                         self.reset_match()
                     elif event.key == pygame.K_ESCAPE:
+                        self.save_high_score()
                         self.running = False
 
                 elif self.state == "playing":
@@ -784,8 +838,7 @@ class GalaxyShootersGame:
                             if bullets:
                                 self.yellow_bullets.extend(bullets)
                                 self.flashes.append(flash)
-                                if self.sound_enabled:
-                                    self.audio.play_laser()
+                                self.audio.play_laser(self.sound_enabled)
 
                     # Red Fire Trigger (Human mode)
                     if (
@@ -796,9 +849,10 @@ class GalaxyShootersGame:
                         if bullets:
                             self.red_bullets.extend(bullets)
                             self.flashes.append(flash)
-                            self.audio.play_laser()
+                            self.audio.play_laser(self.sound_enabled)
 
                     if event.key == pygame.K_ESCAPE:
+                        self.save_high_score()
                         self.state = "menu"
                         self.audio.fadeout_music()
 
@@ -806,6 +860,7 @@ class GalaxyShootersGame:
                     if event.key == pygame.K_r:
                         self.reset_match()
                     elif event.key == pygame.K_ESCAPE:
+                        self.save_high_score()
                         self.state = "menu"
 
     def update_physics_and_ai(self, now: int):
@@ -814,13 +869,14 @@ class GalaxyShootersGame:
 
         keys = pygame.key.get_pressed()
 
-        # Mouse position tracking for Player 1 (Hero Ship)
+        # Mouse position tracking (only when mouse actively moves)
         mx, my = pygame.mouse.get_pos()
-        if pygame.mouse.get_focused():
+        rel_x, rel_y = pygame.mouse.get_rel()
+        if pygame.mouse.get_focused() and (rel_x != 0 or rel_y != 0):
             self.yellow.rect.centerx = max(45, min(BORDER.x - 45, mx))
             self.yellow.rect.centery = max(90, min(HEIGHT - 40, my))
 
-        # Keyboard fallback movement
+        # Keyboard fallback/override movement
         self.yellow.move_human(keys, now, HEIGHT)
 
         # Mouse click continuous stream / rapid fire holding
@@ -830,7 +886,7 @@ class GalaxyShootersGame:
             if bullets:
                 self.yellow_bullets.extend(bullets)
                 self.flashes.append(flash)
-                self.audio.play_laser()
+                self.audio.play_laser(self.sound_enabled)
 
         if self.game_mode == "ai":
             cfg = UNLIMITED_CONFIG.get(self.difficulty, UNLIMITED_CONFIG["simple"])
@@ -850,8 +906,7 @@ class GalaxyShootersGame:
                 if bullets:
                     self.red_bullets.extend(bullets)
                     self.flashes.append(flash)
-                    if self.sound_enabled:
-                        self.audio.play_laser()
+                    self.audio.play_laser(self.sound_enabled)
                 self.red.next_ai_shot_time = now + cfg["fire_interval_ms"]
         else:
             self.red.move_human(keys, now, HEIGHT)
@@ -862,16 +917,30 @@ class GalaxyShootersGame:
             if bullets:
                 self.yellow_bullets.extend(bullets)
                 self.flashes.append(flash)
-                if self.sound_enabled:
-                    self.audio.play_laser()
+                self.audio.play_laser(self.sound_enabled)
 
         # Update starfield background
         self.starfield.update()
 
-        # Generate thruster flames
-        if random.random() < 0.6:
-            self.thruster_particles.append(ThrusterParticle(self.yellow.rect.left, self.yellow.rect.centery, (255, 200, 50), 1))
-            self.thruster_particles.append(ThrusterParticle(self.red.rect.right, self.red.rect.centery, (255, 80, 80), -1))
+        # Generate high-quality dual thruster engine plumes
+        for ship, core_clr, outer_clr, dir_x in [
+            (self.yellow, (255, 185, 30), (235, 70, 20), 1),
+            (self.red, (255, 60, 90), (160, 20, 90), -1),
+        ]:
+            is_boost = ship.is_effect_active("speed", now)
+            spawn_x = ship.rect.left - 2 if dir_x == 1 else ship.rect.right + 2
+            for offset_y in (-12, 12):
+                if random.random() < (0.95 if is_boost else 0.75):
+                    self.thruster_particles.append(
+                        ThrusterParticle(
+                            spawn_x,
+                            ship.rect.centery + offset_y,
+                            core_clr,
+                            outer_clr,
+                            dir_x,
+                            boost=is_boost,
+                        )
+                    )
 
         for tp in self.thruster_particles[:]:
             tp.update()
@@ -996,11 +1065,14 @@ class GalaxyShootersGame:
         surface.blit(hud_bg, (0, 0))
 
         # Health bars
-        self.draw_health_bar(surface, 15, 26, self.yellow.health, self.yellow.max_health, YELLOW)
-        self.draw_health_bar(surface, WIDTH - 15, 26, self.red.health, self.red.max_health, RED, align_right=True)
+        self.draw_health_bar(surface, 15, 14, self.yellow.health, self.yellow.max_health, YELLOW)
+        self.draw_health_bar(surface, WIDTH - 140, 14, self.red.health, self.red.max_health, RED, align_right=True)
 
         # Level Title & Score HUD
-        lvl_title = f"UNLIMITED WAVE {self.wave_count} - {self.difficulty.upper()}"
+        if self.game_mode == "two":
+            lvl_title = "LOCAL 2-PLAYER BATTLE ARENA"
+        else:
+            lvl_title = f"UNLIMITED WAVE {self.wave_count} - {self.difficulty.upper()}"
         lvl_surface = self.health_small_font.render(lvl_title, True, (255, 215, 0))
         surface.blit(lvl_surface, (WIDTH // 2 - lvl_surface.get_width() // 2, 4))
 
@@ -1011,16 +1083,16 @@ class GalaxyShootersGame:
         yellow_active = self.yellow.get_active_labels(now)
         if yellow_active:
             text = self.powerup_font.render(" | ".join(yellow_active), True, WHITE)
-            surface.blit(text, (15, 46))
+            surface.blit(text, (15, 36))
 
         red_active = self.red.get_active_labels(now)
         if red_active:
             text = self.powerup_font.render(" | ".join(red_active), True, WHITE)
-            surface.blit(text, (WIDTH - 15 - text.get_width(), 46))
+            surface.blit(text, (WIDTH - 140 - text.get_width(), 36))
 
         # In-Game Navigation & Pause Button
         mx, my = pygame.mouse.get_pos()
-        btn_nav = pygame.Rect(WIDTH - 135, 12, 120, 34)
+        btn_nav = pygame.Rect(WIDTH - 125, 12, 110, 34)
         is_hovered = btn_nav.collidepoint(mx, my)
         
         nav_bg = pygame.Surface((btn_nav.width, btn_nav.height), pygame.SRCALPHA)
@@ -1049,16 +1121,19 @@ class GalaxyShootersGame:
         surface.blit(subtitle, (WIDTH // 2 - subtitle.get_width() // 2, 145))
 
         # Action Buttons
-        btn_resume = pygame.Rect(WIDTH // 2 - 150, 180, 300, 46)
-        btn_restart = pygame.Rect(WIDTH // 2 - 150, 240, 300, 46)
-        btn_sound = pygame.Rect(WIDTH // 2 - 150, 300, 300, 46)
-        btn_menu = pygame.Rect(WIDTH // 2 - 150, 360, 300, 46)
+        btn_resume = pygame.Rect(WIDTH // 2 - 150, 160, 300, 42)
+        btn_restart = pygame.Rect(WIDTH // 2 - 150, 215, 300, 42)
+        btn_sound = pygame.Rect(WIDTH // 2 - 150, 270, 300, 42)
+        btn_screen = pygame.Rect(WIDTH // 2 - 150, 325, 300, 42)
+        btn_menu = pygame.Rect(WIDTH // 2 - 150, 380, 300, 42)
 
         sound_label = "S  SOUND: ON" if self.sound_enabled else "S  SOUND: OFF"
+        screen_label = "F11  FULLSCREEN: ON" if self.is_fullscreen else "F11  FULLSCREEN: OFF"
         options = [
             (btn_resume, "> RESUME BATTLE <"),
             (btn_restart, "R  RESTART LEVEL"),
             (btn_sound, sound_label),
+            (btn_screen, screen_label),
             (btn_menu, "M  MAIN MENU"),
         ]
 
@@ -1107,8 +1182,8 @@ class GalaxyShootersGame:
         btn_hard = pygame.Rect(WIDTH // 2 + 15, 180, 160, 34)
 
         for r, label, is_act in [
-            (btn_simple, "SIMPLE (EASY)", self.difficulty == "simple"),
-            (btn_hard, "HARD (INTENSE)", self.difficulty == "hard"),
+            (btn_simple, "SIMPLE (EASY)", self.difficulty == "simple" and self.game_mode == "ai"),
+            (btn_hard, "HARD (INTENSE)", self.difficulty == "hard" and self.game_mode == "ai"),
         ]:
             is_h = r.collidepoint(mx, my)
             sub_card = pygame.Surface((r.width, r.height), pygame.SRCALPHA)
@@ -1171,7 +1246,7 @@ class GalaxyShootersGame:
             ft.draw(surface, self.powerup_font, pygame.time.get_ticks())
 
         controls_text = self.health_small_font.render(
-            "Select SIMPLE or HARD difficulty | Left Click to shoot",
+            "Select SIMPLE or HARD difficulty | WASD or Mouse to move | Click / Space to shoot",
             True,
             (180, 210, 255),
         )
@@ -1278,6 +1353,7 @@ class GalaxyShootersGame:
             if self.is_paused:
                 self.draw_pause_navigation_menu(render_surface)
 
+        self.window.fill(BLACK)
         self.window.blit(render_surface, (offset_x, offset_y))
         pygame.display.update()
 
@@ -1287,11 +1363,18 @@ class GalaxyShootersGame:
             now = pygame.time.get_ticks()
             self.handle_events(now)
 
+            # Floating text animations across all states
+            for ft in self.floating_texts[:]:
+                ft.update()
+                if not ft.is_alive(now):
+                    self.floating_texts.remove(ft)
+
             if self.state in ("playing", "level_clear"):
                 self.update_physics_and_ai(now)
 
             self.render(now)
 
+        self.save_high_score()
         pygame.quit()
 
 
