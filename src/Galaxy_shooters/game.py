@@ -572,13 +572,19 @@ class GalaxyShootersGame:
         pygame.init()
         pygame.font.init()
         pygame.mixer.init()
-
         self.is_fullscreen = True
         try:
-            self.window = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN | pygame.SCALED)
+            self.window = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN | pygame.SCALED | pygame.RESIZABLE)
         except Exception:
-            self.is_fullscreen = False
-            self.window = pygame.display.set_mode((WIDTH, HEIGHT))
+            try:
+                self.window = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN | pygame.SCALED)
+            except Exception:
+                try:
+                    info = pygame.display.Info()
+                    self.window = pygame.display.set_mode((info.current_w, info.current_h), pygame.FULLSCREEN)
+                except Exception:
+                    self.is_fullscreen = False
+                    self.window = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Galaxy Shooters")
         self.clock = pygame.time.Clock()
 
@@ -696,11 +702,17 @@ class GalaxyShootersGame:
         self.is_fullscreen = not self.is_fullscreen
         try:
             if self.is_fullscreen:
-                self.window = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN | pygame.SCALED)
+                self.window = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN | pygame.SCALED | pygame.RESIZABLE)
             else:
-                self.window = pygame.display.set_mode((WIDTH, HEIGHT), pygame.SCALED)
+                self.window = pygame.display.set_mode((WIDTH, HEIGHT), pygame.SCALED | pygame.RESIZABLE)
         except Exception:
-            pass
+            try:
+                if self.is_fullscreen:
+                    self.window = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN | pygame.SCALED)
+                else:
+                    self.window = pygame.display.set_mode((WIDTH, HEIGHT), pygame.SCALED)
+            except Exception:
+                pass
 
     def load_high_score(self) -> int:
         try:
