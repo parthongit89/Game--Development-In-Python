@@ -146,7 +146,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const dots = document.querySelectorAll('.dot');
   const prevBtn = document.getElementById('gallery-prev');
   const nextBtn = document.getElementById('gallery-next');
+  const galleryStage = document.getElementById('gallery-stage');
   let currentSlide = 0;
+  let autoSlideInterval = null;
 
   function showSlide(index) {
     if (slides.length === 0) return;
@@ -158,16 +160,57 @@ document.addEventListener('DOMContentLoaded', () => {
     if (dots[currentSlide]) dots[currentSlide].classList.add('active');
   }
 
+  function startAutoSlide() {
+    stopAutoSlide();
+    autoSlideInterval = setInterval(() => {
+      showSlide(currentSlide + 1);
+    }, 4500);
+  }
+
+  function stopAutoSlide() {
+    if (autoSlideInterval) clearInterval(autoSlideInterval);
+  }
+
   if (prevBtn && nextBtn) {
-    prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
-    nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+    prevBtn.addEventListener('click', () => {
+      showSlide(currentSlide - 1);
+      startAutoSlide();
+    });
+    nextBtn.addEventListener('click', () => {
+      showSlide(currentSlide + 1);
+      startAutoSlide();
+    });
   }
 
   dots.forEach(dot => {
     dot.addEventListener('click', () => {
       const index = parseInt(dot.getAttribute('data-index'), 10);
       showSlide(index);
+      startAutoSlide();
     });
+  });
+
+  if (galleryStage) {
+    galleryStage.addEventListener('mouseenter', stopAutoSlide);
+    galleryStage.addEventListener('mouseleave', startAutoSlide);
+  }
+
+  startAutoSlide();
+
+  // Keyboard navigation for gallery & global ESC key to close modals
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') {
+      showSlide(currentSlide - 1);
+      startAutoSlide();
+    } else if (e.key === 'ArrowRight') {
+      showSlide(currentSlide + 1);
+      startAutoSlide();
+    } else if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
+      });
+    }
   });
 
   // Lightbox functionality
