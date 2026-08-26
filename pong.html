@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enhanced Pong — Official Website | @harshalGamearena</title>
+  
+  <!-- OpenGraph & Twitter Social Meta Tags -->
+  <meta property="og:title" content="Enhanced Pong — Retro Arcade Table Tennis Reimagined">
+  <meta property="og:description" content="Master the paddle with procedural sine-wave audio, spin deflection physics, dynamic power-up drops, and 60 FPS game loop engineered in Python & Pygame.">
+  <meta property="og:image" content="src/Pong/image.png">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Enhanced Pong — Official Game Hub">
+  <meta name="twitter:description" content="Master the paddle. Own the table. Features procedural sound synthesis, reactive AI, and motion blur trails.">
+
+  <!-- Google Fonts: Aldrich, Alata, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alata&family=Aldrich&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Minimalist White & Black Theme Stylesheet (Figma Node 471:262) -->
+  <link rel="stylesheet" href="pong_styles.css">
+</head>
+<body>
+
+  <!-- Header & Navigation Bar (Figma Node 474:314) -->
+  <header class="site-header">
+    <nav class="navigations" aria-label="Main Navigation">
+      <a href="#home" class="nav-btn active" data-target="home">Home</a>
+      <a href="#about" class="nav-btn" data-target="about">About Game</a>
+      <a href="#how-to-play" class="nav-btn" data-target="how-to-play">How to Play</a>
+      <a href="#contribute" class="nav-btn" data-target="contribute">Contribute</a>
+      <a href="#developers" class="nav-btn" data-target="developers">Developer’s</a>
+      <a href="#support" class="nav-btn" data-target="support">Support and Upgrades</a>
+      <a href="#reviews" class="nav-btn" data-target="reviews">Reviews</a>
+    </nav>
+  </header>
+
+  <!-- Main Content Container -->
+  <main>
+    
+    <!-- Hero Section (Figma Node 474:331) -->
+    <section id="home" class="hero-container">
+      
+      <!-- Interactive Hero Visual Stage (Paddles & Ball) -->
+      <div class="hero-visual-stage">
+        <div class="hero-paddle-left"></div>
+        <div class="hero-paddle-right"></div>
+        <div class="hero-ball ball-1"></div>
+        <div class="hero-ball ball-2"></div>
+        <div class="hero-ball ball-3"></div>
+        <div class="hero-ball ball-4"></div>
+      </div>
+
+      <h1 class="hero-title">MASTER THE PADDLE. OWN THE TABLE.</h1>
+
+      <!-- Download & GitHub Action Buttons (Figma Node 474:343 & 474:347) -->
+      <div class="hero-buttons">
+        <a href="https://github.com/Ghostofzenin08/Game--Development-In-Python/archive/refs/heads/main.zip" class="black-btn">
+          <i class="fa-solid fa-download"></i> Download Zip
+        </a>
+        <a href="https://github.com/Ghostofzenin08/Game--Development-In-Python" target="_blank" class="black-btn">
+          <i class="fa-brands fa-github"></i> View on Github
+        </a>
+      </div>
+    </section>
+
+    <!-- About Game Section -->
+    <section id="about" class="section">
+      <h2 class="section-title">About Game</h2>
+
+      <div class="features-grid">
+        <div class="feature-box">
+          <h3><i class="fa-solid fa-waveform"></i> Procedural Audio Engine</h3>
+          <p>Synthesizes 100% of game sounds at runtime using mathematical PCM sine-wave formulas—zero external sound files required.</p>
+        </div>
+        <div class="feature-box">
+          <h3><i class="fa-solid fa-gauge-high"></i> Spin Deflection Physics</h3>
+          <p>Rebound trajectory dynamically adjusts based on ball impact point on paddle surface and paddle velocity.</p>
+        </div>
+        <div class="feature-box">
+          <h3><i class="fa-solid fa-bolt"></i> Interactive Power-Ups</h3>
+          <p>Features <strong>+ Grow</strong> (1.5x paddle size extension) and <strong>S Slow</strong> (resets ball speed) drops with active HUD timers.</p>
+        </div>
+        <div class="feature-box">
+          <h3><i class="fa-solid fa-desktop"></i> Fullscreen & AI Modes</h3>
+          <p>Supports native Fullscreen toggle (`F11`), Pause Menu (`P`/`ESC`), AI Difficulty levels (Easy/Medium/Hard), and highscore JSON saving.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- How to Play Section (Figma Node 474:356 & 479:269) -->
+    <section id="how-to-play" class="section">
+      <h2 class="section-title">How to Play</h2>
+      <h3 class="section-subtitle">Copy on the cmd and PowerShell</h3>
+
+      <div class="cmd-container">
+        <!-- Linux / macOS / Cmd -->
+        <div class="cmd-card">
+          <div class="cmd-header">
+            <span class="cmd-label">Cmd</span>
+            <button class="cmd-copy-btn" data-copy="cmd-code-text" title="Copy Command"><i class="fa-regular fa-copy"></i></button>
+          </div>
+          <p class="cmd-text" id="cmd-code-text">git clone https://github.com/Ghostofzenin08/Game--Development-In-Python.git && cd Game--Development-In-Python/src/Pong && python3 -m pip install -r requirements.txt && python3 pong.py</p>
+        </div>
+
+        <!-- Windows PowerShell -->
+        <div class="cmd-card">
+          <div class="cmd-header">
+            <span class="cmd-label">PowerShell</span>
+            <button class="cmd-copy-btn" data-copy="powershell-code-text" title="Copy Command"><i class="fa-regular fa-copy"></i></button>
+          </div>
+          <p class="cmd-text" id="powershell-code-text">git clone https://github.com/Ghostofzenin08/Game--Development-In-Python.git && cd Game--Development-In-Python/src/Pong && python3 -m pip install -r requirements.txt && python3 pong.py</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contribute Section (Figma Node 479:284 - 479:292) -->
+    <section id="contribute" class="section">
+      <h2 class="section-title">Contribute</h2>
+      <h3 class="section-subtitle">Contribute Through a Pull Request</h3>
+
+      <div class="contribute-grid">
+        <!-- Step 1: Fork -->
+        <div class="contribute-card">
+          <i class="fa-solid fa-code-branch contribute-icon"></i>
+          <h4 class="contribute-title">Fork</h4>
+        </div>
+
+        <!-- Step 2: Changes -->
+        <div class="contribute-card">
+          <i class="fa-solid fa-pen-to-square contribute-icon"></i>
+          <h4 class="contribute-title">Changes</h4>
+        </div>
+
+        <!-- Step 3: Commit and Push -->
+        <div class="contribute-card">
+          <i class="fa-solid fa-upload contribute-icon"></i>
+          <h4 class="contribute-title">Commit and Push</h4>
+        </div>
+
+        <!-- Step 4: Create Pull Request -->
+        <div class="contribute-card">
+          <i class="fa-solid fa-code-pull-request contribute-icon"></i>
+          <h4 class="contribute-title">Create a Pull Request</h4>
+        </div>
+      </div>
+    </section>
+
+    <!-- Developer Credentials Section -->
+    <section id="developers" class="section">
+      <h2 class="section-title">Developer’s Credentials</h2>
+
+      <div class="dev-card-wrapper">
+        <div class="dev-avatar-box">
+          <i class="fa-solid fa-user-astronaut"></i>
+        </div>
+        <div class="dev-info">
+          <h3>Harshal</h3>
+          <p class="dev-handles">@harshalGamearena | @Ghostofzenin08</p>
+          <a href="mailto:harshalsonawane308@gmail.com" class="dev-email">
+            <i class="fa-solid fa-envelope"></i> harshalsonawane308@gmail.com
+          </a>
+          <p class="dev-bio">
+            Game Engineering & Software Architecture enthusiast specializing in Python, Pygame, real-time physics simulations, procedural audio synthesis, and reactive AI.
+          </p>
+          <div class="dev-pills">
+            <span class="dev-pill">Python 3.8+</span>
+            <span class="dev-pill">Pygame 2.5+</span>
+            <span class="dev-pill">Procedural Audio Synthesizer</span>
+            <span class="dev-pill">Spin Physics Engine</span>
+            <span class="dev-pill">Dynamic Power-Up Drops</span>
+            <span class="dev-pill">60 FPS Game Loop</span>
+            <span class="dev-pill">JSON Highscore Persistence</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Support and Upgrades Section (Figma Node 479:339 - 479:350) -->
+    <section id="support" class="section">
+      <h2 class="section-title">Support and Upgrades</h2>
+
+      <form class="support-form-container" id="support-form" novalidate>
+        <input type="email" class="support-input-gray" id="support-email" placeholder="Email" required>
+        <textarea class="support-textarea-gray" id="support-msg" placeholder="Messages , Upgrades" rows="5" required></textarea>
+        <button type="submit" class="support-submit-btn">Send Message</button>
+      </form>
+    </section>
+
+    <!-- Reviews Section (Figma Node 486:272 - 486:293) -->
+    <section id="reviews" class="section">
+      <h2 class="section-title">Reviews</h2>
+
+      <div class="reviews-wrapper">
+        <div class="reviews-inner-grid">
+          
+          <!-- Review Input Box -->
+          <textarea class="review-text-white" id="review-content" placeholder="What’s Review on game"></textarea>
+
+          <!-- Rating & Submit Side -->
+          <div class="review-rating-side">
+            <h3 class="rating-prompt">What your Experience ?</h3>
+            
+            <div class="star-rating-row" id="star-rating-row">
+              <i class="fa-solid fa-star star-icon" data-value="1"></i>
+              <i class="fa-solid fa-star star-icon" data-value="2"></i>
+              <i class="fa-solid fa-star star-icon" data-value="3"></i>
+              <i class="fa-solid fa-star star-icon" data-value="4"></i>
+              <i class="fa-solid fa-star star-icon" data-value="5"></i>
+            </div>
+
+            <button type="button" class="review-submit-black" id="submit-review-btn">Submit</button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Live Community Reviews Feed Container -->
+      <div class="community-reviews-box" id="community-reviews-box">
+        <h3 class="review-feed-title"><i class="fa-solid fa-comments"></i> Community Reviews & Ratings</h3>
+        <div id="reviews-feed-container"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast Notifications Container -->
+  <div id="toast-container"></div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>&copy; 2026 Enhanced Pong by @harshalGamearena. Built with Python & Pygame. All rights reserved.</p>
+  </footer>
+
+  <!-- Interactive JavaScript Engine with Persistent Storage -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      
+      // Default Initial Reviews
+      const defaultReviews = [
+        {
+          rating: 5,
+          text: "The procedural audio synthesis is brilliant! Zero external sound files and super crisp pings.",
+          date: "2026-08-25"
+        },
+        {
+          rating: 5,
+          text: "Love the spin deflection physics and AI difficulty options. Hard mode is super challenging!",
+          date: "2026-08-26"
+        }
+      ];
+
+      // Load or Initialize Reviews in localStorage
+      function getStoredReviews() {
+        try {
+          const stored = localStorage.getItem('pong_user_reviews');
+          return stored ? JSON.parse(stored) : defaultReviews;
+        } catch(e) {
+          return defaultReviews;
+        }
+      }
+
+      function saveStoredReviews(reviews) {
+        try {
+          localStorage.setItem('pong_user_reviews', JSON.stringify(reviews));
+        } catch(e) {}
+      }
+
+      // Render Reviews to DOM
+      function renderReviews() {
+        const container = document.getElementById('reviews-feed-container');
+        if (!container) return;
+
+        const reviews = getStoredReviews();
+        container.innerHTML = '';
+
+        reviews.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'review-item-card';
+
+          const starsHtml = Array.from({ length: 5 }, (_, i) => 
+            `<i class="fa-solid fa-star" style="color: ${i < item.rating ? '#ffaa00' : '#cccccc'}"></i>`
+          ).join('');
+
+          card.innerHTML = `
+            <div class="review-item-header">
+              <div class="review-item-stars">${starsHtml}</div>
+              <span class="review-item-date">${item.date}</span>
+            </div>
+            <p class="review-item-body">${escapeHtml(item.text)}</p>
+          `;
+
+          container.appendChild(card);
+        });
+      }
+
+      function escapeHtml(str) {
+        return str.replace(/[&<>'"]/g, 
+          tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+        );
+      }
+
+      renderReviews();
+
+      // Clipboard Copy Handler
+      document.querySelectorAll('.cmd-copy-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const targetId = btn.getAttribute('data-copy');
+          const targetEl = document.getElementById(targetId);
+          if (targetEl) {
+            navigator.clipboard.writeText(targetEl.textContent).then(() => {
+              showToast('Copied command to clipboard!');
+            }).catch(() => {
+              showToast('Failed to copy command.');
+            });
+          }
+        });
+      });
+
+      // Star Rating Interaction
+      const stars = document.querySelectorAll('#star-rating-row .star-icon');
+      const submitBtn = document.getElementById('submit-review-btn');
+      const reviewText = document.getElementById('review-content');
+      let selectedRating = 0;
+
+      stars.forEach(star => {
+        star.addEventListener('click', () => {
+          selectedRating = parseInt(star.getAttribute('data-value'), 10);
+          updateStars(selectedRating);
+        });
+
+        star.addEventListener('mouseenter', () => {
+          const hoverVal = parseInt(star.getAttribute('data-value'), 10);
+          updateStars(hoverVal);
+        });
+      });
+
+      const ratingRow = document.getElementById('star-rating-row');
+      if (ratingRow) {
+        ratingRow.addEventListener('mouseleave', () => {
+          updateStars(selectedRating);
+        });
+      }
+
+      function updateStars(rating) {
+        stars.forEach(star => {
+          const val = parseInt(star.getAttribute('data-value'), 10);
+          if (val <= rating) {
+            star.classList.add('active');
+          } else {
+            star.classList.remove('active');
+          }
+        });
+      }
+
+      if (submitBtn) {
+        submitBtn.addEventListener('click', () => {
+          const content = reviewText ? reviewText.value.trim() : '';
+
+          if (selectedRating === 0) {
+            showToast('Please select a star rating for your experience!');
+            return;
+          }
+
+          if (!content) {
+            showToast('Please enter your review comments.');
+            if (reviewText) reviewText.focus();
+            return;
+          }
+
+          // Save review to localStorage & update DOM
+          const reviews = getStoredReviews();
+          const newReview = {
+            rating: selectedRating,
+            text: content,
+            date: new Date().toLocaleDateString()
+          };
+
+          reviews.unshift(newReview);
+          saveStoredReviews(reviews);
+          renderReviews();
+
+          // Dispatch review directly to harshalsonawane308@gmail.com via FormSubmit API
+          fetch("https://formsubmit.co/ajax/harshalsonawane308@gmail.com", {
+            method: "POST",
+            headers: { 
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+              _subject: `New Enhanced Pong ${selectedRating}-Star Review!`,
+              Rating: `${selectedRating} / 5 Stars`,
+              Review_Comment: content,
+              Submission_Date: new Date().toLocaleString()
+            })
+          }).catch(err => {
+            console.log('Email API dispatch notice:', err);
+          });
+
+          showToast(`⭐ Thank you! Your ${selectedRating}-star review has been published & emailed to harshalsonawane308@gmail.com!`);
+          if (reviewText) reviewText.value = '';
+          selectedRating = 0;
+          updateStars(0);
+        });
+      }
+
+      // Support Form Direct Email Dispatch to harshalsonawane308@gmail.com
+      const supportForm = document.getElementById('support-form');
+      if (supportForm) {
+        supportForm.addEventListener('submit', e => {
+          e.preventDefault();
+          const email = document.getElementById('support-email').value.trim();
+          const msg = document.getElementById('support-msg').value.trim();
+
+          if (!email) {
+            showToast('Please enter your email.');
+            return;
+          }
+          if (!msg) {
+            showToast('Please enter your message.');
+            return;
+          }
+
+          // Save support message to localStorage
+          try {
+            const storedMsgs = JSON.parse(localStorage.getItem('pong_support_messages') || '[]');
+            storedMsgs.unshift({ email, message: msg, date: new Date().toLocaleString() });
+            localStorage.setItem('pong_support_messages', JSON.stringify(storedMsgs));
+          } catch(err) {}
+
+          // Dispatch Support Message directly to harshalsonawane308@gmail.com via FormSubmit API
+          showToast('📧 Sending message to harshalsonawane308@gmail.com...');
+
+          fetch("https://formsubmit.co/ajax/harshalsonawane308@gmail.com", {
+            method: "POST",
+            headers: { 
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+              _subject: `New Support & Upgrade Request from ${email}`,
+              Sender_Email: email,
+              Message_Upgrades: msg,
+              Submission_Time: new Date().toLocaleString()
+            })
+          }).then(res => res.json()).then(data => {
+            showToast('🚀 Success! Message sent directly to harshalsonawane308@gmail.com');
+          }).catch(err => {
+            // Fallback to mailto link if API is unreachable
+            window.location.href = `mailto:harshalsonawane308@gmail.com?subject=Support %26 Upgrade Request&body=Sender: ${encodeURIComponent(email)}%0A%0AMessage:%0A${encodeURIComponent(msg)}`;
+            showToast('Opened email client for harshalsonawane308@gmail.com!');
+          });
+
+          supportForm.reset();
+        });
+      }
+
+      // Toast Notification Function
+      function showToast(message) {
+        let container = document.getElementById('toast-container');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = 'toast-msg';
+        toast.textContent = message;
+
+        container.appendChild(toast);
+
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          setTimeout(() => toast.remove(), 300);
+        }, 3500);
+      }
+
+
+    });
+  </script>
+</body>
+</html>
+

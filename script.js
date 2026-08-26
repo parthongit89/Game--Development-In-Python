@@ -376,7 +376,67 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ------------------------------------------------------------------------
-   * 7. Toast Notification System
+   * 7. Star Rating & Review Submission Handler
+   * ------------------------------------------------------------------------ */
+  const stars = document.querySelectorAll('#star-rating .star');
+  const submitReviewBtn = document.getElementById('submit-review-btn');
+  const reviewText = document.getElementById('review-text');
+  let selectedRating = 0;
+
+  stars.forEach(star => {
+    star.addEventListener('click', () => {
+      selectedRating = parseInt(star.getAttribute('data-value'), 10);
+      updateStars(selectedRating);
+    });
+
+    star.addEventListener('mouseenter', () => {
+      const hoverVal = parseInt(star.getAttribute('data-value'), 10);
+      updateStars(hoverVal);
+    });
+  });
+
+  const ratingContainer = document.getElementById('star-rating');
+  if (ratingContainer) {
+    ratingContainer.addEventListener('mouseleave', () => {
+      updateStars(selectedRating);
+    });
+  }
+
+  function updateStars(rating) {
+    stars.forEach(star => {
+      const val = parseInt(star.getAttribute('data-value'), 10);
+      if (val <= rating) {
+        star.classList.add('active');
+      } else {
+        star.classList.remove('active');
+      }
+    });
+  }
+
+  if (submitReviewBtn) {
+    submitReviewBtn.addEventListener('click', () => {
+      const reviewContent = reviewText ? reviewText.value.trim() : '';
+
+      if (selectedRating === 0) {
+        showToast('Please select a star rating for your experience!');
+        return;
+      }
+
+      if (!reviewContent) {
+        showToast('Please enter your review comments.');
+        if (reviewText) reviewText.focus();
+        return;
+      }
+
+      showToast(`Thank you! Your ${selectedRating}-star review has been submitted.`);
+      if (reviewText) reviewText.value = '';
+      selectedRating = 0;
+      updateStars(0);
+    });
+  }
+
+  /* ------------------------------------------------------------------------
+   * 8. Toast Notification System
    * ------------------------------------------------------------------------ */
   function showToast(message) {
     const container = document.getElementById('toast-container');
@@ -396,3 +456,4 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 });
+

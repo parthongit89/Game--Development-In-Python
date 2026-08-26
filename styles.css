@@ -1429,3 +1429,224 @@ main {
   }
 }
 
+/* ==========================================================================
+   Enhanced Pong Specific Styles (Figma Node 471:262)
+   ========================================================================== */
+
+/* Terminal & Code Execution Blocks */
+.cmd-block-card {
+  width: 100%;
+  background: rgba(30, 30, 30, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius-md);
+  padding: 24px 30px;
+  margin-bottom: 25px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+
+}
+
+.cmd-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.cmd-badge {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cmd-code {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  color: #00ff66;
+  background: #000000;
+  padding: 16px 20px;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid rgba(0, 255, 102, 0.25);
+  word-break: break-all;
+  position: relative;
+}
+
+/* Contribute 4-Grid Cards */
+.contribute-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 25px;
+  width: 100%;
+  margin-top: 30px;
+}
+
+.contribute-card-item {
+  background: rgba(30, 30, 30, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--border-radius-md);
+  padding: 30px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.contribute-card-item:hover {
+  transform: translateY(-5px);
+  border-color: #ffffff;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
+  background: rgba(45, 45, 45, 0.85);
+}
+
+.step-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #ffffff;
+  margin-bottom: 18px;
+}
+
+.step-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-white);
+  margin-bottom: 10px;
+}
+
+.step-desc {
+  font-size: 0.95rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+
+/* Reviews & Star Rating Section */
+.reviews-section {
+  width: 100%;
+}
+
+.reviews-container {
+  width: 100%;
+  max-width: 1100px;
+  background: rgba(30, 30, 30, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius-lg);
+  padding: 40px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+}
+
+.reviews-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+@media (max-width: 850px) {
+  .reviews-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.review-input-box {
+  width: 100%;
+  height: 180px;
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius-md);
+  padding: 20px;
+  color: var(--text-white);
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  resize: vertical;
+}
+
+.review-input-box:focus {
+  outline: none;
+  border-color: #00ff66;
+  box-shadow: 0 0 10px rgba(0, 255, 102, 0.3);
+}
+
+.star-rating-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--border-radius-md);
+  padding: 30px;
+  text-align: center;
+}
+
+.rating-label {
+  font-size: 1.25rem;
+  color: var(--text-white);
+  margin-bottom: 20px;
+}
+
+.star-rating {
+  display: flex;
+  gap: 12px;
+  font-size: 2rem;
+  color: rgba(255, 255, 255, 0.25);
+  margin-bottom: 25px;
+  cursor: pointer;
+}
+
+.star-rating .star {
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.star-rating .star:hover,
+.star-rating .star.active {
+  color: #ffb800;
+  transform: scale(1.15);
+}
+
+.submit-review-btn {
+  width: 100%;
+  max-width: 240px;
+  height: 50px;
+  background: var(--btn-green);
+  border: none;
+  border-radius: var(--border-radius-md);
+  color: var(--text-white);
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--green-glow);
+}
+
+.submit-review-btn:hover {
+  background: var(--btn-green-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(0, 255, 64, 0.6);
+}
+
+.game-switch-btn {
+  background: rgba(255, 215, 0, 0.15);
+  border-color: #ffd700;
+  color: #ffd700;
+}
+
+.game-switch-btn:hover {
+  background: rgba(255, 215, 0, 0.3);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+}
+
+

@@ -8,8 +8,10 @@ import pygame
 class SoundEffects:
     def __init__(self):
         self._sounds = {name: self._tone(freq, duration) for name, freq, duration in (
-            ("hit", 620, .07), ("wall", 300, .05), ("score", 180, .18), ("power", 900, .12)
+            ("hit", 620, .07), ("wall", 300, .05), ("score", 180, .18), ("power", 900, .12),
+            ("countdown_beep", 440, .08), ("countdown_go", 880, .15), ("victory", 523, .35)
         )}
+
 
     @staticmethod
     def _tone(frequency, duration):

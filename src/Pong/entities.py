@@ -19,9 +19,11 @@ class Paddle:
         self.height = PADDLE_HEIGHT * 1.5 if now < self.grow_until else PADDLE_HEIGHT
         self.y = max(0, min(self.y, HEIGHT - self.height))
 
-    def move(self, direction):
+    def move(self, direction, speed=None):
+        s = speed if speed is not None else self.SPEED
         self.last_move = direction
-        self.y = max(0, min(self.y + direction * self.SPEED, HEIGHT - self.height))
+        self.y = max(0, min(self.y + direction * s, HEIGHT - self.height))
+
 
     def stop(self): self.last_move = 0
 
